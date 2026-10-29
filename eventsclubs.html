@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events & Clubs</title>
+  <meta name="description" content="System Flows: Automated Ticketing, Employee Dashboard, Vendor Coordination, Real-Time ROI for event organizers and club owners." />
+  
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900&family=Inter:wght@300;400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    :root {
+      --background: 43, 33%, 93%;
+      --foreground: 0, 0%, 8%;
+      --warm-accent: 30, 60%, 32%;
+      --muted-foreground: 0, 0%, 40%;
+      --control-red: #d70000;
+    }
+    * { transition: background-color 0.2s ease, border-color 0.2s ease; }
+    body {
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+      font-family: 'Inter', sans-serif;
+    }
+    .font-display-sans { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.02em; }
+    .font-mono-custom { font-family: 'DM Mono', monospace; }
+    .font-system-mono { font-family: 'JetBrains Mono', 'DM Mono', monospace; }
+    .flow-card {
+      background: hsla(220, 20%, 96%, 0.5);
+      border: 1px solid hsla(var(--foreground), 0.12);
+    }
+    .execution-sequence {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      background: hsla(var(--foreground), 0.03);
+      border-left: 3px solid #d70000;
+      padding: 0.75rem;
+    }
+    .flow-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      background: hsla(var(--foreground), 0.06);
+      padding: 0.25rem 0.6rem;
+      letter-spacing: 0.03em;
+      color: #d70000;
+    }
+    .clickable-contact {
+      cursor: pointer;
+      transition: opacity 0.2s;
+      display: inline-block;
+    }
+    .clickable-contact:hover { opacity: 0.7; text-decoration: underline; }
+    .flow-image {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+      border: 1px solid hsla(var(--foreground), 0.2);
+    }
+  </style>
+</head>
+<body class="bg-background text-foreground">
+
+<!-- ── TOP BAR WITH REAL-TIME CLOCK ── -->
+<div class="border-b border-[hsl(0,0%,8%)]">
+  <div class="flex items-center justify-between px-4 md:px-8 py-2 text-xs font-mono tracking-widest uppercase">
+    <span id="live-clock">LOADING...</span>
+    <span>ISSUE 01</span>
+  </div>
+  <div class="text-center py-2 border-t border-[hsl(0,0%,8%)]">
+    <p class="text-xs font-mono tracking-[0.3em] uppercase">
+      Strategic Systems & Operational Intelligence
+    </p>
+  </div>
+</div>
+
+<!-- ── MASTHEAD with "CONTROL" in red ── -->
+<div class="text-center py-8 md:py-12 border-b border-[hsl(0,0%,8%)]">
+  <p class="text-xs font-mono tracking-[0.4em] uppercase mb-4">
+    ← <a href="index.html" class="hover:underline">RETURN TO BASE</a>
+  </p>
+  <h1 class="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+    THE <span style="color: #d70000;">CONTROL</span><br />ROOM
+  </h1>
+  <p class="text-xs font-mono tracking-[0.4em] uppercase mt-4 opacity-50">
+EVENTS & CLUBS
+  </p>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12">
+
+  <!-- MAIN TITLE: System Flows -->
+  <div class="mb-10">
+    <h1 class="font-display-sans text-4xl md:text-5xl font-bold tracking-tight">Tell us your biggest headache. We’ll automate it.</h1>
+  </div>
+
+  <!-- FLOW 1: Automated Ticketing, Refund & Post‑Sale Management -->
+  <div class="flow-card rounded-sm mb-12 overflow-hidden">
+    <div class="p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="flow-id font-system-mono text-xs font-semibold">FLOW ID: EC-TK-001</span>
+        <span class="font-mono-custom text-[10px] uppercase tracking-wider text-muted-foreground">TICKETING & CUSTOMER SUPPORT</span>
+      </div>
+      
+      <img src="assets/eventsclubs/flow1.jpg" alt="Automated Ticketing, Refund & Post‑Sale Management" class="flow-image" onerror="this.style.display='none'">
+      
+      <h2 class="font-display-sans text-2xl md:text-3xl font-bold mb-3">Automated Ticketing, Refund & Post‑Sale Management</h2>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Your tickets sell out in minutes. But cancellations turn into PR disasters. Refund delays, angry customers, staff overwhelmed. We fix that.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Every booking is tracked from purchase to check‑in. Cancellations trigger automated refund processing within hours, not weeks. Customers get instant WhatsApp confirmation.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        AI‑powered bot detection blocks ticket hoarding before it starts — stops scalpers from buying 70% of your inventory before genuine fans.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-6 leading-relaxed">
+        Reduces post‑event customer support staff by 80% because refunds, confirmations, and updates are fully automated.
+      </p>
+      
+      <div class="execution-sequence">
+        <p class="font-system-mono text-[10px] uppercase tracking-wider font-semibold mb-2" style="color: #d70000;">EXECUTION SEQUENCE</p>
+        <p class="font-system-mono text-xs break-words">[TICKET SALE STARTS] → [AI BOT DETECTION ACTIVATED] → [SCALPERS BLOCKED IN REAL‑TIME] → [GENUINE BUYERS COMPLETE PURCHASE] → [AUTOMATED CONFIRMATION & E‑TICKET SENT] → [CANCELLATION OR EVENT RESCHEDULE OCCURS] → [AUTOMATED REFUND CALCULATED & PROCESSED] → [CUSTOMER RECEIVES WHATSAPP CONFIRMATION] → [MANUAL REFUND CALLS REDUCED BY 90%] → [YOU CUT SUPPORT STAFF COSTS BY 70%]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW 2: Employee & Temporary Staff Productivity Dashboard -->
+  <div class="flow-card rounded-sm mb-12 overflow-hidden">
+    <div class="p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="flow-id font-system-mono text-xs font-semibold">FLOW ID: EC-EP-002</span>
+        <span class="font-mono-custom text-[10px] uppercase tracking-wider text-muted-foreground">HUMAN RESOURCES & STAFFING</span>
+      </div>
+      
+      <img src="assets/eventsclubs/flow2.jpg" alt="Employee & Temporary Staff Productivity Dashboard" class="flow-image" onerror="this.style.display='none'">
+      
+      <h2 class="font-display-sans text-2xl md:text-3xl font-bold mb-3">Employee & Temporary Staff Productivity Dashboard</h2>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        You hire 50‑200 temporary staff per event. You don't know who is working, who is efficient, and who is stealing time. One dashboard gives you 100% visibility — and cuts your temp staff costs.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Every temporary staff member logs in/out via mobile at their assigned zone. GPS‑verified check‑in prevents time theft.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Real‑time task completion tracking and efficiency ranking — see which temp staff are productive and which are idle.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-6 leading-relaxed">
+        Cuts temporary staff headcount by 30‑40% because you replace low‑performers with fewer, better workers. Saves ₹50,000‑1,00,000 per large event.
+      </p>
+      
+      <div class="execution-sequence">
+        <p class="font-system-mono text-[10px] uppercase tracking-wider font-semibold mb-2" style="color: #d70000;">EXECUTION SEQUENCE</p>
+        <p class="font-system-mono text-xs break-words">[TEMP STAFF LOGS IN VIA MOBILE AT ZONE] → [GPS VERIFIES LOCATION] → [SYSTEM TRACKS HOURS & TASK COMPLETION] → [MANAGER DASHBOARD SHOWS REAL‑TIME EFFICIENCY RANKING] → [UNDERPERFORMING STAFF FLAGGED] → [REPLACE WITH FEWER, BETTER WORKERS] → [NEXT EVENT REQUIRES 30‑40% FEWER STAFF] → [YOU SAVE LAKHS PER YEAR ON TEMP WAGES]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW 3: Vendor & Contractor Coordination System -->
+  <div class="flow-card rounded-sm mb-12 overflow-hidden">
+    <div class="p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="flow-id font-system-mono text-xs font-semibold">FLOW ID: EC-VC-003</span>
+        <span class="font-mono-custom text-[10px] uppercase tracking-wider text-muted-foreground">VENDOR MANAGEMENT</span>
+      </div>
+      
+      <img src="assets/eventsclubs/flow3.jpg" alt="Vendor & Contractor Coordination System" class="flow-image" onerror="this.style.display='none'">
+      
+      <h2 class="font-display-sans text-2xl md:text-3xl font-bold mb-3">Vendor & Contractor Coordination System</h2>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        You work with 20‑50 vendors per event — caterers, sound, lights, security, decor, transport. Manual coordination means missed deliveries, delayed setup, angry clients. We automate every handoff.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Every vendor receives automated task lists, delivery deadlines, and zone assignments via WhatsApp — no phone calls, no missed instructions.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Real‑time status tracking: vendor marks "delivered", "setup complete", or "issue flagged". Manager sees dashboard instantly.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-6 leading-relaxed">
+        Reduces event coordination staff by 50% because vendors self‑manage through the system — your team stops chasing everyone.
+      </p>
+      
+      <div class="execution-sequence">
+        <p class="font-system-mono text-[10px] uppercase tracking-wider font-semibold mb-2" style="color: #d70000;">EXECUTION SEQUENCE</p>
+        <p class="font-system-mono text-xs break-words">[EVENT CONTRACT SIGNED] → [VENDOR LIST IMPORTED] → [EACH VENDOR RECEIVES WHATSAPP TASK LIST & DEADLINES] → [VENDOR MARKS PROGRESS: "EN ROUTE" / "SETUP STARTED" / "COMPLETE"] → [MANAGER DASHBOARD SHOWS REAL‑TIME VENDOR STATUS] → [ISSUES FLAGGED IMMEDIATELY] → [DELAYS ESCALATED AUTOMATICALLY] → [COORDINATION STAFF FOCUS ONLY ON EXCEPTIONS] → [STAFF HEADCOUNT REDUCED BY 50%]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW 4: Real‑Time Profit & Event ROI Dashboard -->
+  <div class="flow-card rounded-sm mb-12 overflow-hidden">
+    <div class="p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="flow-id font-system-mono text-xs font-semibold">FLOW ID: EC-ROI-004</span>
+        <span class="font-mono-custom text-[10px] uppercase tracking-wider text-muted-foreground">FINANCE & ROI</span>
+      </div>
+      
+      <img src="assets/eventsclubs/flow4.jpg" alt="Real‑Time Profit & Event ROI Dashboard" class="flow-image" onerror="this.style.display='none'">
+      
+      <h2 class="font-display-sans text-2xl md:text-3xl font-bold mb-3">Real‑Time Profit & Event ROI Dashboard</h2>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        You run 10‑50 events a year. You don't know which events made money and which lost money until weeks later, when your finance team finishes manual reconciliation. By then, it's too late to fix anything.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Every expense (vendor payments, staff wages, venue rent, marketing spend) and every revenue stream (ticket sales, sponsorships, F&B) auto‑synced into one dashboard.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Real‑time profit calculation per event — see losses the moment they happen, not months later.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-6 leading-relaxed">
+        Cuts finance reconciliation time by 80%. Your team stops spending days on spreadsheets and starts making data‑driven decisions.
+      </p>
+      
+      <div class="execution-sequence">
+        <p class="font-system-mono text-[10px] uppercase tracking-wider font-semibold mb-2" style="color: #d70000;">EXECUTION SEQUENCE</p>
+        <p class="font-system-mono text-xs break-words">[ALL EXPENSES LOGGED AS THEY HAPPEN] → [TICKET SALES & SPONSORSHIP REVENUE SYNCED LIVE] → [SYSTEM CALCULATES PROFIT = REVENUE − EXPENSES] → [MANAGER DASHBOARD SHOWS LIVE PROFIT PER EVENT] → [LOSSES FLAGGED IN REAL‑TIME] → [DECISIONS MADE IMMEDIATELY] → [FINANCE TEAM SAVES 80% OF RECONCILIATION TIME] → [YOU KNOW YOUR MARGINS BEFORE THE EVENT ENDS]</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── CTA BAND (place this before the footer) ── -->
+<div class="border-t border-b border-[hsl(0,0%,8%)] px-4 md:px-8 py-10 bg-[hsl(0,0%,8%)] text-[hsl(43,33%,93%)]">
+  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8">
+    <div class="text-center md:text-right">
+      <h3 class="font-['Playfair_Display'] text-2xl md:text-3xl font-black uppercase">
+        Tell us your biggest headache.<br />We'll automate it.
+      </h3>
+      <p class="text-[10px] font-mono tracking-widest uppercase opacity-50 mt-2">
+        SUBMIT A CLASSIFIED REQUEST
+      </p>
+    </div>
+    <div class="text-3xl font-mono opacity-60 hidden md:block">→</div>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSe-UKw42SFnz4eDwfle2Xt5i4m85mJWpDaalE3nRZVE1vEKMw/viewform" target="_blank" class="inline-block px-10 py-4 text-sm font-mono tracking-widest uppercase transition-all duration-200 hover:opacity-80 whitespace-nowrap" style="background-color: #d70000; color: white; border: none; letter-spacing: 0.1em; font-weight: 500;">
+        OPEN A FILE →
+      </a>
+  </div>
+</div>
+
+<!-- FOOTER (same as other pages) -->
+<footer class="border-t border-foreground/20 py-8 px-4 mt-12">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
+    <div>
+      <h3 class="font-display-sans font-bold">The Control Room</h3>
+      <p class="text-xs text-muted-foreground mt-2">Strategic systems for organizations that demand clarity, structure, and operational control. Building systems that matter.</p>
+    </div>
+    <div>
+      <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Navigation</h4>
+      <ul class="text-xs space-y-1 mt-2">
+        <li><a href="index.html" class="hover:underline">Return to Base</a></li>
+        <li><a href="archives.html" class="hover:underline">Archives</a></li>
+        <li><a href="how-we-work.html" class="hover:underline">How We Work</a></li>
+        <li><a href="hiring.html" class="hover:underline">Personnel Division</a></li>
+        <li><a href="realestate.html" class="hover:underline">Real Estate Systems</a></li>
+        <li><a href="eventsclubs.html" class="hover:underline">Events & Clubs Systems</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Visibility</h4>
+      <ul class="text-xs space-y-1 mt-2">
+        <li><a href="https://www.linkedin.com/company/thecontrolroom/?viewAsMember=true" target="_blank" class="hover:underline">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/thecontrolroom.agency/" target="_blank" class="hover:underline">Instagram</a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=61586382514772" target="_blank" class="hover:underline">Facebook</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Contact</h4>
+      <div class="text-xs mt-2 space-y-1">
+        <a href="mailto:connect@thecontrolroom.solutions" class="clickable-contact font-mono-custom block hover:opacity-70">connect@thecontrolroom.solutions</a>
+        <a href="tel:+919082638041" class="clickable-contact font-mono-custom block hover:opacity-70">+91 9082638041</a>
+      </div>
+    </div>
+  </div>
+  <div class="text-center text-[10px] font-mono-custom mt-8">© 2027 THE CONTROL ROOM. ALL RIGHTS RESERVED.</div>
+</footer>
+
+<script>
+  // Live clock update (formatted as: WEDNESDAY, MAY 06, 2026 AT 04:19:09 PM)
+  function updateClock() {
+    const now = new Date();
+    const formatted = now.toLocaleString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    }).toUpperCase();
+    
+    document.getElementById('live-clock').textContent = formatted;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>

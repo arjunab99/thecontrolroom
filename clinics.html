@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinics</title>
+  <meta name="description" content="System Flows: ABDM Compliance, Digital Records, Staff Productivity, Inventory & Claims Automation for clinics and healthcare providers." />
+  
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900&family=Inter:wght@300;400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    :root {
+      --background: 43, 33%, 93%;
+      --foreground: 0, 0%, 8%;
+      --warm-accent: 30, 60%, 32%;
+      --muted-foreground: 0, 0%, 40%;
+      --control-red: #d70000;
+    }
+    * { transition: background-color 0.2s ease, border-color 0.2s ease; }
+    body {
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+      font-family: 'Inter', sans-serif;
+    }
+    .font-display-sans { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.02em; }
+    .font-mono-custom { font-family: 'DM Mono', monospace; }
+    .font-system-mono { font-family: 'JetBrains Mono', 'DM Mono', monospace; }
+    .flow-card {
+      background: hsla(220, 20%, 96%, 0.5);
+      border: 1px solid hsla(var(--foreground), 0.12);
+    }
+    .execution-sequence {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      background: hsla(var(--foreground), 0.03);
+      border-left: 3px solid #d70000;
+      padding: 0.75rem;
+    }
+    .flow-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      background: hsla(var(--foreground), 0.06);
+      padding: 0.25rem 0.6rem;
+      letter-spacing: 0.03em;
+      color: #d70000;
+    }
+    .clickable-contact {
+      cursor: pointer;
+      transition: opacity 0.2s;
+      display: inline-block;
+    }
+    .clickable-contact:hover { opacity: 0.7; text-decoration: underline; }
+    .flow-image {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+      border: 1px solid hsla(var(--foreground), 0.2);
+    }
+  </style>
+</head>
+<body class="bg-background text-foreground">
+
+<!-- ── TOP BAR WITH REAL-TIME CLOCK ── -->
+<div class="border-b border-[hsl(0,0%,8%)]">
+  <div class="flex items-center justify-between px-4 md:px-8 py-2 text-xs font-mono tracking-widest uppercase">
+    <span id="live-clock">LOADING...</span>
+    <span>ISSUE 01</span>
+  </div>
+  <div class="text-center py-2 border-t border-[hsl(0,0%,8%)]">
+    <p class="text-xs font-mono tracking-[0.3em] uppercase">
+      Strategic Systems & Operational Intelligence
+    </p>
+  </div>
+</div>
+
+<!-- ── MASTHEAD with "CONTROL" in red ── -->
+<div class="text-center py-8 md:py-12 border-b border-[hsl(0,0%,8%)]">
+  <p class="text-xs font-mono tracking-[0.4em] uppercase mb-4">
+    ← <a href="index.html" class="hover:underline">RETURN TO BASE</a>
+  </p>
+  <h1 class="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+    THE <span style="color: #d70000;">CONTROL</span><br />ROOM
+  </h1>
+  <p class="text-xs font-mono tracking-[0.4em] uppercase mt-4 opacity-50">
+  CLINICS & HEALTHCARE
+  </p>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12">
+
+  <!-- MAIN TITLE: System Flows -->
+  <div class="mb-10">
+    <h1 class="font-display-sans text-4xl md:text-5xl font-bold tracking-tight">Share your ideas, we will build you a solution.</h1>
+  </div>
+
+  <!-- FLOW 1: ABDM Compliance, Digital Records & Prescription Management -->
+  <div class="flow-card rounded-sm mb-12 overflow-hidden">
+    <div class="p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="flow-id font-system-mono text-xs font-semibold">FLOW ID: CLINIC-ABDM-001</span>
+        <span class="font-mono-custom text-[10px] uppercase tracking-wider text-muted-foreground">DIGITAL HEALTH RECORDS</span>
+      </div>
+      
+      <img src="assets/clinics/flow1.jpg" alt="ABDM Compliance, Digital Records & Prescription Management" class="flow-image" onerror="this.style.display='none'">
+      
+      <h2 class="font-display-sans text-2xl md:text-3xl font-bold mb-3">ABDM Compliance, Digital Records & Prescription Management</h2>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        India's ABDM has created over 79 crore digital health accounts and linked 65 crore health records, but manual record‑keeping is still standard in most clinics. Patients carry paper files, lose reports, struggle with continuity of care. You face dual data entry — for your internal records and for ABDM — adding hours of unpaid admin time. This lowers productivity, raises operational costs, and takes focus away from patient care.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Get a lightweight, ABDM‑linked system that digitises every patient record, prescription, and lab report in one integrated place. Fully compliant with India's data protection laws, it gives you unified patient history — from first visit to latest follow‑up — accessible from any device, even offline. Features include digital and e‑prescriptions, ABHA ID creation for patients, seamless telemedicine integration, and zero duplicate data entry. Cuts paperwork time by 70-80% for doctors and staff, reduces patient waiting time by up to 13 minutes per visit, and streamlines your operations, making your clinic more efficient while ensuring full regulatory compliance.
+      </p>
+      
+      <div class="execution-sequence">
+        <p class="font-system-mono text-[10px] uppercase tracking-wider font-semibold mb-2" style="color: #d70000;">EXECUTION SEQUENCE</p>
+        <p class="font-system-mono text-xs break-words">[PATIENT REGISTRATION (WALK‑IN OR ONLINE)] → [SYSTEM CREATES OR FETCHES UNIFIED DIGITAL HEALTH RECORD (EHR/EMR)] → [DOCTOR CONSULTS, PRESCRIBES DIGITALLY, AND GENERATES e‑PRESCRIPTION] → [RECORDS AUTO‑UPLOADED TO ABDM WITH PATIENT CONSENT] → [LAB REPORTS, DIAGNOSTIC IMAGES, AND FOLLOW‑UPS ATTACHED TO SAME PATIENT ID] → [PATIENT RECEIVES WHATSAPP LINK TO VIEW/MANAGE THEIR OWN RECORDS] → [DOCTOR SPENDS 70‑80% LESS TIME ON PAPERWORK] → [PATIENT WAITING TIME REDUCED BY UP TO 13 MINUTES] → [CLINIC FULLY DIGITAL, ABDM‑COMPLIANT, AND OPERATIONALLY STREAMLINED]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW 2: Staff Productivity, Leave & Workflow Automation -->
+  <div class="flow-card rounded-sm mb-12 overflow-hidden">
+    <div class="p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="flow-id font-system-mono text-xs font-semibold">FLOW ID: CLINIC-HR-002</span>
+        <span class="font-mono-custom text-[10px] uppercase tracking-wider text-muted-foreground">HUMAN RESOURCES & WORKFLOW</span>
+      </div>
+      
+      <img src="assets/clinics/flow2.jpg" alt="Staff Productivity, Leave & Workflow Automation" class="flow-image" onerror="this.style.display='none'">
+      
+      <h2 class="font-display-sans text-2xl md:text-3xl font-bold mb-3">Staff Productivity, Leave & Workflow Automation</h2>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        India faces an estimated 21% shortage of healthcare personnel, with even higher deficits among specialists and paramedics. Clinicians in India are fatigued, with 79% seeing more patients now than they did two years ago. Burnout drives nurse attrition rates as high as 25‑30%. Your remaining staff is overworked, unfocused, and disorganised. No real‑time visibility into who is working, who is idle, or where workflow bottlenecks exist.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Get a central dashboard that logs every staff member's clock‑in/out, tracks task completion (patient check‑in, billing, prescription processing), and handles leave requests automatically. Automated shift scheduling, skill‑based task assignment, real‑time queue dashboards, and AI‑assisted patient triage let you run with fewer staff while maintaining quality. Cuts overtime costs by at least 20‑30%, reduces avoidable attrition by 10‑15%, and boosts overall staff productivity by up to 40%.
+      </p>
+      
+      <div class="execution-sequence">
+        <p class="font-system-mono text-[10px] uppercase tracking-wider font-semibold mb-2" style="color: #d70000;">EXECUTION SEQUENCE</p>
+        <p class="font-system-mono text-xs break-words">[STAFF LOG IN/OUT VIA MOBILE OR WEB] → [SYSTEM TRACKS HOURS, BREAKS, TASK COMPLETION, LEAVE REQUESTS] → [MANAGER DASHBOARD SHOWS REAL‑TIME EFFICIENCY RANKING, PATIENT WAIT TIMES, BOTTLENECK ALERTS] → [OVERWORKED STAFF FLAGGED, IDLE STAFF REDEPLOYED] → [SHIFT SCHEDULING AUTO‑OPTIMISED BASED ON PATIENT FOOTFALL PREDICTIONS] → [NURSE AND DOCTOR BURNOUT REDUCED, ATTRITION CUT BY 10‑15%] → [PATIENT WAITING TIME DROPS, STAFF OVERTIME COSTS CUT BY 20‑30%] → [YOU RUN SMOOTHLY WITH A SMALLER, HAPPIER TEAM]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW 3: Inventory, Billing & Insurance Claims Automation -->
+  <div class="flow-card rounded-sm mb-12 overflow-hidden">
+    <div class="p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="flow-id font-system-mono text-xs font-semibold">FLOW ID: CLINIC-INV-003</span>
+        <span class="font-mono-custom text-[10px] uppercase tracking-wider text-muted-foreground">INVENTORY & FINANCE</span>
+      </div>
+      
+      <img src="assets/clinics/flow3.jpg" alt="Inventory, Billing & Insurance Claims Automation" class="flow-image" onerror="this.style.display='none'">
+      
+      <h2 class="font-display-sans text-2xl md:text-3xl font-bold mb-3">Inventory, Billing & Insurance Claims Automation</h2>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Medicine stockouts are the silent killer of clinic credibility. A patient prescribed a life‑saving drug, sent away empty‑handed, rarely returns — and tells others not to come. Stockouts occur not from lack of demand but from lack of inventory visibility. In rural clinics, essential medicine availability is only ~40% before intervention; in cities, drug shortages still last for months. Billing is fragmented, insurance claims take weeks, and revenue is stuck in limbo.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Implement an automated inventory management system that tracks stock levels in real time, sends low‑stock alerts before you run out, and auto‑generates purchase orders based on consumption patterns and seasonal demand. Integrate a unified billing and insurance module that auto‑generates GST‑ready invoices, submits claims digitally with 90% fewer errors, and follows up on rejections automatically — accelerating settlement times from weeks to days. Cuts inventory carrying costs by 15‑25%, increases claims approval rates by up to 30%, ensures you never run out of critical medicines, and turns your pharmacy into a reliable, revenue‑positive department.
+      </p>
+      
+      <div class="execution-sequence">
+        <p class="font-system-mono text-[10px] uppercase tracking-wider font-semibold mb-2" style="color: #d70000;">EXECUTION SEQUENCE</p>
+        <p class="font-system-mono text-xs break-words">[PHARMACY STAFF LOGS MEDICINE DISPENSES AND STOCK RECEIPTS IN REAL TIME] → [SYSTEM TRACKS MINIMUM STOCK LEVELS, EXPIRY DATES, CONSUMPTION PATTERNS] → [AUTO‑LOW‑STOCK ALERT AND PURCHASE ORDER GENERATED BEFORE STOCKOUT] → [BILLING SYSTEM GENERATES GST‑READY INVOICE AND DIGITAL PRESCRIPTION] → [INSURANCE CLAIM AUTO‑SUBMITTED, TRACKED, AND FOLLOWED UP] → [CLAIMS SETTLED IN 5‑7 DAYS INSTEAD OF 6‑8 WEEKS] → [STOCKOUTS ELIMINATED, REVENUE LEAKAGE STOPPED, PATIENT TRUST RESTORED]</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── CTA BAND (place this before the footer) ── -->
+<div class="border-t border-b border-[hsl(0,0%,8%)] px-4 md:px-8 py-10 bg-[hsl(0,0%,8%)] text-[hsl(43,33%,93%)]">
+  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8">
+    <div class="text-center md:text-right">
+      <h3 class="font-['Playfair_Display'] text-2xl md:text-3xl font-black uppercase">
+        Share your ideas,<br />we will build you a solution.
+      </h3>
+      <p class="text-[10px] font-mono tracking-widest uppercase opacity-50 mt-2">
+        SUBMIT A CLASSIFIED REQUEST
+      </p>
+    </div>
+    <div class="text-3xl font-mono opacity-60 hidden md:block">→</div>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSe-UKw42SFnz4eDwfle2Xt5i4m85mJWpDaalE3nRZVE1vEKMw/viewform" target="_blank" class="inline-block px-10 py-4 text-sm font-mono tracking-widest uppercase transition-all duration-200 hover:opacity-80 whitespace-nowrap" style="background-color: #d70000; color: white; border: none; letter-spacing: 0.1em; font-weight: 500;">
+        OPEN A FILE →
+      </a>
+  </div>
+</div>
+
+<!-- FOOTER (same as other pages) -->
+<footer class="border-t border-foreground/20 py-8 px-4 mt-12">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
+    <div>
+      <h3 class="font-display-sans font-bold">The Control Room</h3>
+      <p class="text-xs text-muted-foreground mt-2">Strategic systems for organizations that demand clarity, structure, and operational control. Building systems that matter.</p>
+    </div>
+    <div>
+      <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Navigation</h4>
+      <ul class="text-xs space-y-1 mt-2">
+        <li><a href="index.html" class="hover:underline">Return to Base</a></li>
+        <li><a href="archives.html" class="hover:underline">Archives</a></li>
+        <li><a href="how-we-work.html" class="hover:underline">How We Work</a></li>
+        <li><a href="hiring.html" class="hover:underline">Personnel Division</a></li>
+        <li><a href="realestate.html" class="hover:underline">Real Estate Systems</a></li>
+        <li><a href="eventsclubs.html" class="hover:underline">Events & Clubs Systems</a></li>
+        <li><a href="hospitality.html" class="hover:underline">Hospitality Systems</a></li>
+        <li><a href="clinics.html" class="hover:underline">Clinics & Healthcare Systems</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Visibility</h4>
+      <ul class="text-xs space-y-1 mt-2">
+        <li><a href="https://www.linkedin.com/company/thecontrolroom/?viewAsMember=true" target="_blank" class="hover:underline">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/thecontrolroom.agency/" target="_blank" class="hover:underline">Instagram</a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=61586382514772" target="_blank" class="hover:underline">Facebook</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Contact</h4>
+      <div class="text-xs mt-2 space-y-1">
+        <a href="mailto:connect@thecontrolroom.solutions" class="clickable-contact font-mono-custom block hover:opacity-70">connect@thecontrolroom.solutions</a>
+        <a href="tel:+919082638041" class="clickable-contact font-mono-custom block hover:opacity-70">+91 9082638041</a>
+      </div>
+    </div>
+  </div>
+  <div class="text-center text-[10px] font-mono-custom mt-8">© 2027 THE CONTROL ROOM. ALL RIGHTS RESERVED.</div>
+</footer>
+
+<script>
+  // Live clock update (formatted as: WEDNESDAY, MAY 06, 2026 AT 04:19:09 PM)
+  function updateClock() {
+    const now = new Date();
+    const formatted = now.toLocaleString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    }).toUpperCase();
+    
+    document.getElementById('live-clock').textContent = formatted;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>

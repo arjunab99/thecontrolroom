@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hospitality</title>
+  <meta name="description" content="System Flows: Automated Direct Booking, Staff Productivity Dashboard, Guest Complaint Ticketing, Multi-Property Operations for hotels and resorts." />
+  
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900&family=Inter:wght@300;400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    :root {
+      --background: 43, 33%, 93%;
+      --foreground: 0, 0%, 8%;
+      --warm-accent: 30, 60%, 32%;
+      --muted-foreground: 0, 0%, 40%;
+      --control-red: #d70000;
+    }
+    * { transition: background-color 0.2s ease, border-color 0.2s ease; }
+    body {
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+      font-family: 'Inter', sans-serif;
+    }
+    .font-display-sans { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.02em; }
+    .font-mono-custom { font-family: 'DM Mono', monospace; }
+    .font-system-mono { font-family: 'JetBrains Mono', 'DM Mono', monospace; }
+    .flow-card {
+      background: hsla(220, 20%, 96%, 0.5);
+      border: 1px solid hsla(var(--foreground), 0.12);
+    }
+    .execution-sequence {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      background: hsla(var(--foreground), 0.03);
+      border-left: 3px solid #d70000;
+      padding: 0.75rem;
+    }
+    .flow-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      background: hsla(var(--foreground), 0.06);
+      padding: 0.25rem 0.6rem;
+      letter-spacing: 0.03em;
+      color: #d70000;
+    }
+    .clickable-contact {
+      cursor: pointer;
+      transition: opacity 0.2s;
+      display: inline-block;
+    }
+    .clickable-contact:hover { opacity: 0.7; text-decoration: underline; }
+    .flow-image {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+      border: 1px solid hsla(var(--foreground), 0.2);
+    }
+  </style>
+</head>
+<body class="bg-background text-foreground">
+
+<!-- ── TOP BAR WITH REAL-TIME CLOCK ── -->
+<div class="border-b border-[hsl(0,0%,8%)]">
+  <div class="flex items-center justify-between px-4 md:px-8 py-2 text-xs font-mono tracking-widest uppercase">
+    <span id="live-clock">LOADING...</span>
+    <span>ISSUE 01</span>
+  </div>
+  <div class="text-center py-2 border-t border-[hsl(0,0%,8%)]">
+    <p class="text-xs font-mono tracking-[0.3em] uppercase">
+      Strategic Systems & Operational Intelligence
+    </p>
+  </div>
+</div>
+
+<!-- ── MASTHEAD with "CONTROL" in red ── -->
+<div class="text-center py-8 md:py-12 border-b border-[hsl(0,0%,8%)]">
+  <p class="text-xs font-mono tracking-[0.4em] uppercase mb-4">
+    ← <a href="index.html" class="hover:underline">RETURN TO BASE</a>
+  </p>
+  <h1 class="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+    THE <span style="color: #d70000;">CONTROL</span><br />ROOM
+  </h1>
+  <p class="text-xs font-mono tracking-[0.4em] uppercase mt-4 opacity-50">
+HOSPITALITY
+  </p>
+</div>
+
+<div class="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12">
+
+  <!-- MAIN TITLE: System Flows -->
+  <div class="mb-10">
+    <h1 class="font-display-sans text-4xl md:text-5xl font-bold tracking-tight">Guest experience not perfect? Share your challenge. We’ll build the fix.</h1>
+  </div>
+
+  <!-- FLOW 1: Automated Direct Booking & OTA Commission Recovery -->
+  <div class="flow-card rounded-sm mb-12 overflow-hidden">
+    <div class="p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="flow-id font-system-mono text-xs font-semibold">FLOW ID: HOSP-DB-001</span>
+        <span class="font-mono-custom text-[10px] uppercase tracking-wider text-muted-foreground">REVENUE MANAGEMENT</span>
+      </div>
+      
+      <img src="assets/hospitality/flow1.jpg" alt="Automated Direct Booking & OTA Commission Recovery" class="flow-image" onerror="this.style.display='none'">
+      
+      <h2 class="font-display-sans text-2xl md:text-3xl font-bold mb-3">Automated Direct Booking & OTA Commission Recovery</h2>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        You pay 18-25% of every booking to MakeMyTrip, Booking.com, and Agoda. Worse, 55% of your inquiries arrive after 7 PM — when your front desk is closed or understaffed. Those guests book elsewhere before morning. We capture them.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Every after-hours WhatsApp and website inquiry gets an instant, intelligent reply — 24/7, no human needed. Converts lookers into bookers even when your team is asleep.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Reduces OTA dependency by 30-40% within 3 months. Puts 18-25% commission back in your pocket — directly to your bottom line.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-6 leading-relaxed">
+        Cuts front desk overtime by 50% because automated replies handle 70-80% of routine inquiries (availability, pricing, check-in/out times, amenities).
+      </p>
+      
+      <div class="execution-sequence">
+        <p class="font-system-mono text-[10px] uppercase tracking-wider font-semibold mb-2" style="color: #d70000;">EXECUTION SEQUENCE</p>
+        <p class="font-system-mono text-xs break-words">[GUEST INQUIRY ARRIVES VIA WEBSITE OR WHATSAPP AFTER 7 PM] → [AI AUTO-REPLY SENDS ROOM OPTIONS, PRICING, AVAILABILITY IN REAL TIME] → [GUEST PROVIDES DATES AND PREFERENCES] → [SYSTEM CHECKS PMS, CONFIRMS ROOM, SHARES DIRECT BOOKING LINK] → [GUEST BOOKS DIRECTLY WITHOUT HUMAN INTERVENTION] → [OTA COMMISSION AVOIDED — 18-25% STAYS WITH YOU] → [FRONT DESK OVERSEES ONLY HIGH-VALUE OR COMPLEX RESERVATIONS] → [YOU SAVE LAKHS PER YEAR IN COMMISSIONS AND OVERTIME COSTS]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW 2: Employee Productivity & Staff Attrition Dashboard -->
+  <div class="flow-card rounded-sm mb-12 overflow-hidden">
+    <div class="p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="flow-id font-system-mono text-xs font-semibold">FLOW ID: HOSP-HR-002</span>
+        <span class="font-mono-custom text-[10px] uppercase tracking-wider text-muted-foreground">HUMAN RESOURCES</span>
+      </div>
+      
+      <img src="assets/hospitality/flow2.jpg" alt="Employee Productivity & Staff Attrition Dashboard" class="flow-image" onerror="this.style.display='none'">
+      
+      <h2 class="font-display-sans text-2xl md:text-3xl font-bold mb-3">Employee Productivity & Staff Attrition Dashboard</h2>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        India faces a shortage of over 150,000 trained hospitality professionals, with annual attrition crossing 40% at entry and supervisory levels. You hire constantly. You don't know who is efficient, who is idle, and who is about to leave — until they quit. One dashboard gives you 100% visibility.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Every staff member logs in/out via mobile at their assigned zone. Real-time task completion tracking and efficiency ranking — see which staff are productive and which are underperforming.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Identifies disengaged employees before they resign. Retention alerts trigger when a high-performing staff member shows signs of burnout or disengagement.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-6 leading-relaxed">
+        Cuts recruitment costs by 30-40% because you retain your best people. Reduces hiring needs by forecasting vacancies before they happen.
+      </p>
+      
+      <div class="execution-sequence">
+        <p class="font-system-mono text-[10px] uppercase tracking-wider font-semibold mb-2" style="color: #d70000;">EXECUTION SEQUENCE</p>
+        <p class="font-system-mono text-xs break-words">[STAFF LOGS IN VIA MOBILE AT ASSIGNED ZONE OR DEPARTMENT] → [GPS VERIFIES LOCATION & TIMESTAMP] → [TASKS ASSIGNED, COMPLETION LOGGED IN REAL TIME] → [MANAGER DASHBOARD SHOWS EFFICIENCY RANKING, PRODUCTIVITY TRENDS, ENGAGEMENT SCORES] → [SYSTEM FLAGS STAFF WITH LOW TASK COMPLETION OR IRREGULAR LOGIN PATTERNS] → [RETENTION ALERTS TRIGGER WHEN HIGH-POTENTIAL STAFF SHOW SIGNS OF DISENGAGEMENT] → [MANAGER REASSIGNS WORKLOADS, PROVIDES TARGETED TRAINING OR COACHING] → [RECRUITMENT CYCLE LENGTH REDUCED, HIRING COSTS CUT BY 30-40%]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW 3: Automated Guest Complaint Ticketing & Service Recovery System -->
+  <div class="flow-card rounded-sm mb-12 overflow-hidden">
+    <div class="p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="flow-id font-system-mono text-xs font-semibold">FLOW ID: HOSP-CS-003</span>
+        <span class="font-mono-custom text-[10px] uppercase tracking-wider text-muted-foreground">CUSTOMER SERVICE</span>
+      </div>
+      
+      <img src="assets/hospitality/flow3.jpg" alt="Automated Guest Complaint Ticketing & Service Recovery System" class="flow-image" onerror="this.style.display='none'">
+      
+      <h2 class="font-display-sans text-2xl md:text-3xl font-bold mb-3">Automated Guest Complaint Ticketing & Service Recovery System</h2>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        A recent survey of 10,000 Indian travellers found that just 38% of problems were resolved within an hour, and 29% of travellers said their issues were never resolved at all. 55% of travellers report unmet expectations. Slow resolution kills your reputation and repeat bookings. We fix that.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Every guest complaint from WhatsApp, front desk, email, or review platform becomes a ticket with a full lifecycle — open, assigned, in progress, resolved, closed.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Auto-escalation if not resolved in 2 hours for urgent issues (maintenance, safety, billing errors), 4 hours for non-urgent. No ticket forgotten.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Automated service recovery — system offers compensation (discount, upgrade, free meal) based on issue severity, pre-approved by management.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-6 leading-relaxed">
+        Cuts guest relations staff workload by 50% because follow-ups, updates, and compensation are automated. Improves guest satisfaction scores by 40-50% within 8 weeks.
+      </p>
+      
+      <div class="execution-sequence">
+        <p class="font-system-mono text-[10px] uppercase tracking-wider font-semibold mb-2" style="color: #d70000;">EXECUTION SEQUENCE</p>
+        <p class="font-system-mono text-xs break-words">[GUEST COMPLAINT RECEIVED VIA WHATSAPP, FRONT DESK, EMAIL, OR REVIEW] → [TICKET CREATED WITH UNIQUE ID, AUTO-CATEGORISED (MAINTENANCE, SERVICE, BILLING, ETC.)] → [PRIORITY ASSIGNED BASED ON KEYWORD SCAN ("BROKEN", "LEAK", "REFUND", "LAWYER", "UNHYGIENIC")] → [AUTO-ASSIGNED TO RIGHT DEPARTMENT (HOUSEKEEPING, MAINTENANCE, FRONT DESK)] → [GUEST RECEIVES AUTO-ACKNOWLEDGMENT WITH EXPECTED RESOLUTION TIME] → [ESCALATED TO MANAGER IF NO UPDATE IN 2/4 HOURS] → [SYSTEM TRIGGERS SERVICE RECOVERY OFFER (DISCOUNT, UPGRADE, FREE MEAL) BASED ON SEVERITY] → [TICKET CLOSED WITH GUEST CONFIRMATION] → [WEEKLY REPORT SENT TO OWNER: RESOLUTION RATE, AVERAGE RESPONSE TIME, MOST COMMON COMPLAINTS] → [CUSTOMER SATISFACTION SCORES IMPROVE BY 40-50% IN 8 WEEKS]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOW 4: Multi-Property Unified Operations Dashboard -->
+  <div class="flow-card rounded-sm mb-12 overflow-hidden">
+    <div class="p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <span class="flow-id font-system-mono text-xs font-semibold">FLOW ID: HOSP-OPS-004</span>
+        <span class="font-mono-custom text-[10px] uppercase tracking-wider text-muted-foreground">OPERATIONS & FINANCE</span>
+      </div>
+      
+      <img src="assets/hospitality/flow4.jpg" alt="Multi-Property Unified Operations Dashboard" class="flow-image" onerror="this.style.display='none'">
+      
+      <h2 class="font-display-sans text-2xl md:text-3xl font-bold mb-3">Multi-Property Unified Operations Dashboard</h2>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        You own multiple properties — a hotel, a resort, a restaurant. Each runs on different spreadsheets, different staff, different systems. You have no real-time view of your total profit across all properties. We build one screen for your entire empire.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Live data from all properties in one dashboard — occupancy, ADR (average daily rate), RevPAR (revenue per available room), staff task completion, guest complaints, maintenance requests, and monthly P&L.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Centralized housekeeping coordination — room status (clean/dirty/occupied) synced across all properties in real time. No double-booking, no cleaning delays.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-3 leading-relaxed">
+        Automated purchase order consolidation — requisitions from all properties auto-merged to achieve volume discounts from suppliers. Reduces procurement costs by 15-20%.
+      </p>
+      
+      <p class="text-sm text-muted-foreground mb-6 leading-relaxed">
+        Cuts management time spent on manual consolidation by 60-70%. Management visits properties only for exceptions, not daily oversight.
+      </p>
+      
+      <div class="execution-sequence">
+        <p class="font-system-mono text-[10px] uppercase tracking-wider font-semibold mb-2" style="color: #d70000;">EXECUTION SEQUENCE</p>
+        <p class="font-system-mono text-xs break-words">[REVENUE DATA FROM PMS, BOOKING ENGINES, F&B AND OTHER SOURCES PULLED] → [OCCUPANCY, ADR, REVPAR, STAFF TASKS, GUEST COMPLAINTS, MAINTENANCE REQUESTS CONSOLIDATED] → [DASHBOARD REFRESHED IN REAL TIME] → [OWNER SEES LIVE P&L, EXCEPTIONS FLAGGED AUTOMATICALLY] → [HOUSEKEEPING STATUS SYNCED ACROSS PROPERTIES — ROOM READY ALERTS, CLEANING ASSIGNMENTS] → [PURCHASE REQUISITIONS FROM ALL PROPERTIES MERGED, SYSTEM NEGOTIATES VOLUME DISCOUNTS WITH SUPPLIERS] → [PROCUREMENT COSTS DROP BY 15-20%] → [MANAGEMENT SPENDS 60-70% LESS TIME ON MANUAL CONSOLIDATION] → [OWNER FOCUS ONLY ON GROWTH, NOT FIREFIGHTING]</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── CTA BAND (place this before the footer) ── -->
+<div class="border-t border-b border-[hsl(0,0%,8%)] px-4 md:px-8 py-10 bg-[hsl(0,0%,8%)] text-[hsl(43,33%,93%)]">
+  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8">
+    <div class="text-center md:text-right">
+      <h3 class="font-['Playfair_Display'] text-2xl md:text-3xl font-black uppercase">
+        Guest experience not perfect?<br />Share your challenge. We'll build the fix.
+      </h3>
+      <p class="text-[10px] font-mono tracking-widest uppercase opacity-50 mt-2">
+        SUBMIT A CLASSIFIED REQUEST
+      </p>
+    </div>
+    <div class="text-3xl font-mono opacity-60 hidden md:block">→</div>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSe-UKw42SFnz4eDwfle2Xt5i4m85mJWpDaalE3nRZVE1vEKMw/viewform" target="_blank" class="inline-block px-10 py-4 text-sm font-mono tracking-widest uppercase transition-all duration-200 hover:opacity-80 whitespace-nowrap" style="background-color: #d70000; color: white; border: none; letter-spacing: 0.1em; font-weight: 500;">
+        OPEN A FILE →
+      </a>
+  </div>
+</div>
+
+<!-- FOOTER (same as other pages) -->
+<footer class="border-t border-foreground/20 py-8 px-4 mt-12">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
+    <div>
+      <h3 class="font-display-sans font-bold">The Control Room</h3>
+      <p class="text-xs text-muted-foreground mt-2">Strategic systems for organizations that demand clarity, structure, and operational control. Building systems that matter.</p>
+    </div>
+    <div>
+      <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Navigation</h4>
+      <ul class="text-xs space-y-1 mt-2">
+        <li><a href="index.html" class="hover:underline">Return to Base</a></li>
+        <li><a href="archives.html" class="hover:underline">Archives</a></li>
+        <li><a href="how-we-work.html" class="hover:underline">How We Work</a></li>
+        <li><a href="hiring.html" class="hover:underline">Personnel Division</a></li>
+        <li><a href="realestate.html" class="hover:underline">Real Estate Systems</a></li>
+        <li><a href="eventsclubs.html" class="hover:underline">Events & Clubs Systems</a></li>
+        <li><a href="hospitality.html" class="hover:underline">Hospitality Systems</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Visibility</h4>
+      <ul class="text-xs space-y-1 mt-2">
+        <li><a href="https://www.linkedin.com/company/thecontrolroom/?viewAsMember=true" target="_blank" class="hover:underline">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/thecontrolroom.agency/" target="_blank" class="hover:underline">Instagram</a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=61586382514772" target="_blank" class="hover:underline">Facebook</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Contact</h4>
+      <div class="text-xs mt-2 space-y-1">
+        <a href="mailto:connect@thecontrolroom.solutions" class="clickable-contact font-mono-custom block hover:opacity-70">connect@thecontrolroom.solutions</a>
+        <a href="tel:+919082638041" class="clickable-contact font-mono-custom block hover:opacity-70">+91 9082638041</a>
+      </div>
+    </div>
+  </div>
+  <div class="text-center text-[10px] font-mono-custom mt-8">© 2027 THE CONTROL ROOM. ALL RIGHTS RESERVED.</div>
+</footer>
+
+<script>
+  // Live clock update (formatted as: WEDNESDAY, MAY 06, 2026 AT 04:19:09 PM)
+  function updateClock() {
+    const now = new Date();
+    const formatted = now.toLocaleString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    }).toUpperCase();
+    
+    document.getElementById('live-clock').textContent = formatted;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>

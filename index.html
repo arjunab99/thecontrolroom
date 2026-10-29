@@ -1,618 +1,1295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>THE CONTROL ROOM — Strategic Systems & Operational Intelligence</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TCRTech.Solutions</title>
+  <meta name="description" content="Strategic systems for organizations that demand clarity, structure, and operational control." />
 
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="shortcut icon" href="favicon.ico">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <meta name="theme-color" content="#0a0a0a">
-  
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&family=Gochi+Hand&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="tailwind-compiled.css">
+
   <style>
-    /* Custom CSS Variables and Animations */
+    /* ============ THEME: navy / gray dots / red ============ */
     :root {
-      --background: 43 33% 93%;
-      --foreground: 0 0% 8%;
-      --primary: 0 0% 8%;
-      --primary-foreground: 43 33% 93%;
-      --border: 0 0% 8%;
+      --navy: #1b1e4a;
+      --dot: #afaea2;
+      --red: #d21316;
+      --cream: #f3f1ea;
+
+      --background: 236, 47%, 20%;
+      --foreground: 47, 27%, 94%;
+      --muted-foreground: 55, 8%, 66%;
+      --primary: 47, 27%, 94%;
+      --primary-foreground: 236, 47%, 20%;
+      --radius: 0px;
     }
 
-    /* Base styles */
+    * { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
     body {
-      background-color: hsl(43, 33%, 93%);
-      color: hsl(0, 0%, 8%);
-      font-family: 'DM Sans', sans-serif;
+      background-color: var(--navy);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', serif; }
+    .font-display-sans { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.02em; }
+    .font-mono-custom { font-family: 'DM Mono', monospace; }
+    .border-foreground\/20 { border-color: rgba(175,174,162,0.28); }
+    .bg-background { background-color: var(--navy); }
+    .text-foreground { color: var(--cream); }
+    .text-muted-foreground { color: var(--dot); }
+
+    /* Interactive dot canvas sits behind everything */
+    #dot-canvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; display: block; }
+    .page { position: relative; z-index: 1; min-height: 100vh; }
+
+    .btn-editorial {
+      background-color: var(--cream);
+      color: var(--navy);
+      padding: 0.75rem 1.5rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+      border: none;
+      transition: opacity 0.2s;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .btn-editorial:hover { opacity: 0.85; }
+    .clickable-contact { cursor: pointer; transition: opacity 0.2s; display: inline-block; color: var(--cream); text-decoration: none; }
+    .clickable-contact:hover { opacity: 0.7; text-decoration: underline; }
+    a { color: inherit; }
+
+    /* ---------- Modal ---------- */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(8,9,30,0.85);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal-content {
+      background-color: var(--navy);
+      color: var(--cream);
+      max-width: 700px; width: 100%; max-height: 85vh; overflow-y: auto;
+      border: 1px solid var(--dot);
+      padding: 2rem; position: relative;
+      transform: scale(0.9); transition: transform 0.3s ease;
+      box-sizing: border-box;
+    }
+    .modal-overlay.active .modal-content { transform: scale(1); }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem; z-index: 2;
+      background: var(--navy); color: var(--cream); border: 1px solid var(--dot);
+      width: 2rem; height: 2rem; cursor: pointer; font-size: 1.2rem;
+      line-height: 1; display: flex; align-items: center; justify-content: center;
+    }
+    .case-study-img {
+      width: 100%; height: auto; object-fit: cover; border-radius: 2px;
+      margin-bottom: 1rem; border: 1px solid rgba(175,174,162,0.3);
+    }
+    .modal-banner {
+      width: 100%; height: 180px; border-radius: 2px; margin-bottom: 1rem;
+      display: flex; align-items: flex-end; padding: 1rem;
+      color: #fff; font-family: 'DM Mono', monospace; font-size: 0.8rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      box-sizing: border-box;
     }
 
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Playfair Display', serif;
-    }
-
-    .font-mono {
-      font-family: 'Space Mono', monospace !important;
-    }
-
-    .border-foreground {
-      border-color: hsl(0, 0%, 8%);
-    }
-
-    .bg-primary {
-      background-color: hsl(0, 0%, 8%);
-    }
-
-    .text-primary-foreground {
-      color: hsl(43, 33%, 93%);
-    }
-
-    .bg-primary-foreground {
-      background-color: hsl(43, 33%, 93%);
-    }
-
-    .text-primary {
-      color: hsl(0, 0%, 8%);
-    }
-
-    .divide-foreground > :not([hidden]) ~ :not([hidden]) {
-      border-color: hsl(0, 0%, 8%);
-    }
-
-    /* Marquee animation */
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .animate-marquee {
-      animation: marquee 30s linear infinite;
-    }
-    
-    .animate-marquee:hover {
-      animation-play-state: paused;
-    }
-
-    /* Custom first letter styling */
-    .first-letter\:text-5xl::first-letter {
-      font-size: 3rem;
-      font-family: 'Playfair Display', serif;
-      font-weight: 900;
-      float: left;
-      margin-right: 0.5rem;
-      line-height: 1;
-    }
-
-    /* Transitions */
-    .transition-opacity {
-      transition-property: opacity;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      transition-duration: 150ms;
-    }
-
-    .transition-colors {
-      transition-property: background-color, border-color, color, fill, stroke;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      transition-duration: 200ms;
-    }
-
-    .hover\:opacity-60:hover {
-      opacity: 0.6;
-    }
-
-    .hover\:opacity-70:hover {
-      opacity: 0.7;
-    }
-
-    .hover\:opacity-90:hover {
-      opacity: 0.9;
-    }
-
-    .hover\:bg-foreground:hover {
-      background-color: hsl(0, 0%, 8%);
-    }
-
-    .hover\:text-background:hover {
-      color: hsl(43, 33%, 93%);
-    }
-    
-    /* Image styling */
-    .object-cover {
-      object-fit: cover;
-    }
-    
-    /* Tactical image border */
-    .tactical-image {
-      border: 2px solid hsl(0, 0%, 8%);
+    /* ---------- HERO: logo + mac window ---------- */
+    .hero {
       position: relative;
+      width: 100%;
+      padding: 64px clamp(16px, 4vw, 48px) 36px;
+      display: flex; align-items: flex-start; gap: clamp(16px, 3vw, 40px);
+      box-sizing: border-box;
     }
-    
-    .tactical-image::after {
-      content: '';
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      right: 4px;
-      bottom: 4px;
-      border: 1px solid hsl(43, 33%, 93%);
-      pointer-events: none;
-      opacity: 0.3;
+    .hero-logo {
+      flex: 0 0 clamp(130px, 17vw, 250px);
+      width: clamp(130px, 17vw, 250px);
+      margin-top: 0;
+      background: transparent;
+      border-radius: 14px;
+      padding: clamp(8px, 1vw, 14px);
+      display: flex; align-items: flex-start; justify-content: center;
+      box-sizing: border-box;
+    }
+    .hero-logo img { width: 100%; height: auto; display: block; }
+    .hero-logo-fallback {
+      display: none; width: 100%; min-height: 70px;
+      align-items: center; justify-content: center;
+      background: var(--red); color: #fff; border-radius: 10px;
+      font-family: 'DM Mono', monospace; font-weight: 500;
+      font-size: clamp(1.4rem, 3vw, 2.4rem); letter-spacing: 0.05em;
+    }
+    .menu-toggle {
+      position: absolute; top: 16px; right: clamp(16px, 4vw, 48px); z-index: 6;
+      background: var(--red); color: #fff; border: none; cursor: pointer;
+      padding: 0.6rem 1rem; border-radius: 4px;
+      font-family: 'Inter', sans-serif; font-weight: 600;
+      font-size: 0.8rem; letter-spacing: 0.02em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 0.6rem;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .menu-toggle:hover { opacity: 0.85; }
+    .menu-toggle .bars { display: inline-flex; flex-direction: column; gap: 3px; }
+    .menu-toggle .bars i { display: block; width: 14px; height: 2px; background: #fff; }
+
+    /* Mac window */
+    .mac-window {
+      flex: 1; min-width: 0;
+      height: clamp(430px, 72vh, 660px);
+      background: #f5f5f5;
+      border-radius: 28px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
+      display: flex; flex-direction: column;
+      overflow: hidden; position: relative;
+      color: #111;
+    }
+    .mac-window * { transition: none; }
+    .mac-titlebar {
+      height: 50px; flex: 0 0 50px; padding: 0 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: relative; z-index: 5;
+    }
+    .mac-left, .mac-right { display: flex; align-items: center; gap: 14px; color: #3a3a3a; }
+    .mac-dots { display: flex; gap: 8px; margin-right: 6px; }
+    .mac-dots i { width: 12px; height: 12px; border-radius: 50%; display: block; }
+    .mac-dots i:nth-child(1) { background: #ff5f57; }
+    .mac-dots i:nth-child(2) { background: #febc2e; }
+    .mac-dots i:nth-child(3) { background: #28c840; }
+    .mac-window svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .mac-body { position: relative; flex: 1; min-height: 0; }
+
+    .mac-sidebar {
+      position: absolute; left: 16px; top: 4px; z-index: 5;
+      width: 172px; background: #fff; border-radius: 14px;
+      padding: 14px 10px 12px; font-size: 11.5px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .mac-search { padding: 0 8px 12px; color: #9a9a9a; }
+    .mac-sidebar a {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 8px; border-radius: 8px;
+      color: #222; text-decoration: none; font-weight: 400;
+    }
+    .mac-sidebar a svg { width: 12px; height: 12px; }
+    .mac-sidebar a.active, .mac-sidebar a:hover { background: #f1f1f1; }
+    .mac-sidebar .group { margin: 12px 8px 4px; color: #a3a3a3; font-size: 11px; }
+    .mac-sidebar .divider { height: 1px; background: #e8e8e8; margin: 18px 8px 8px; }
+
+    /* sliding colourful pages */
+    .slides { position: absolute; inset: 0; overflow: hidden; }
+    .track { display: flex; height: 100%; transition: transform 0.9s cubic-bezier(.65,.05,.25,1); }
+    .slide { flex: 0 0 100%; position: relative; display: flex; align-items: center; justify-content: center; }
+    .page-main {
+      position: relative; width: min(42%, 340px); height: 66%;
+      border-radius: 44px; display: flex; align-items: flex-end; padding: 22px;
+      color: rgba(255,255,255,0.92);
+      font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+      box-shadow: 0 24px 50px rgba(0,0,0,0.18);
+      animation: floaty 6s ease-in-out infinite;
+    }
+    .sheet { position: absolute; border-radius: 18px; box-shadow: 0 14px 30px rgba(0,0,0,0.14); }
+    .sheet-a { width: clamp(70px, 9vw, 120px); height: clamp(90px, 12vw, 150px); right: 22%; top: 14%; transform: rotate(10deg); animation: floaty 5s ease-in-out infinite reverse; }
+    .sheet-b { width: clamp(60px, 8vw, 100px); height: clamp(60px, 8vw, 100px); left: 20%; top: 30%; transform: rotate(-12deg); border-radius: 50%; animation: floaty 7s ease-in-out infinite; }
+    .sheet-c { width: clamp(80px, 10vw, 130px); height: clamp(60px, 8vw, 90px); right: 16%; bottom: 20%; transform: rotate(-6deg); animation: floaty 6.5s ease-in-out infinite; }
+    @keyframes floaty { 0%,100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+
+    .s1 .page-main { background: linear-gradient(135deg, #ff6aa8, #c2185b 60%, #ffb3d1); }
+    .s1 .sheet-a { background: linear-gradient(135deg, #5b8cff, #2b4fd8); }
+    .s1 .sheet-b { background: linear-gradient(135deg, #ffd24d, #ff8a00); }
+    .s1 .sheet-c { background: linear-gradient(135deg, #7affc9, #12b886); }
+
+    .s2 .page-main { background: linear-gradient(135deg, #3fa9ff, #1d4ed8 60%, #8be9ff); }
+    .s2 .sheet-a { background: linear-gradient(135deg, #ff7a59, #d21316); }
+    .s2 .sheet-b { background: linear-gradient(135deg, #e5a8ff, #9b30ff); }
+    .s2 .sheet-c { background: linear-gradient(135deg, #ffe66d, #ffa800); }
+
+    .s3 .page-main { background: linear-gradient(135deg, #ffb347, #ff5e3a 60%, #ffd86b); }
+    .s3 .sheet-a { background: linear-gradient(135deg, #7affc9, #0ea5a5); }
+    .s3 .sheet-b { background: linear-gradient(135deg, #ff6aa8, #b5179e); }
+    .s3 .sheet-c { background: linear-gradient(135deg, #7aa7ff, #4338ca); }
+
+    .slide-dots { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 4; }
+    .slide-dots button {
+      width: 8px; height: 8px; border-radius: 50%; border: none; padding: 0; cursor: pointer;
+      background: rgba(0,0,0,0.2);
+    }
+    .slide-dots button.on { background: #111; width: 22px; border-radius: 8px; }
+
+    .mac-input {
+      position: absolute; right: 16px; bottom: 16px; z-index: 5;
+      width: clamp(220px, 32%, 340px); height: 48px; background: #fff; border-radius: 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 8px 0 18px; font-size: 11.5px; color: #a3a3a3;
+      text-decoration: none;
+      box-sizing: border-box;
+    }
+    .mac-input .btns { display: flex; gap: 6px; }
+    .mac-input .btns span {
+      width: 30px; height: 30px; border-radius: 50%; background: #e9e9e9; color: #333;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mac-input .btns svg { width: 13px; height: 13px; }
+
+    /* ---------- RIGHT SIDEBAR ---------- */
+    .sidebar-backdrop {
+      position: fixed; inset: 0; background: rgba(8,9,30,0.6);
+      opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1100;
+    }
+    .sidebar-backdrop.active { opacity: 1; visibility: visible; }
+    .sidebar {
+      position: fixed; top: 0; right: 0; height: 100%;
+      width: min(340px, 85vw);
+      background: var(--navy);
+      border-left: 1px solid var(--dot);
+      transform: translateX(100%);
+      transition: transform 0.35s ease;
+      z-index: 1200;
+      padding: 1.5rem 1.75rem;
+      display: flex; flex-direction: column;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    .sidebar.active { transform: translateX(0); }
+    .sidebar-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 1rem; border-bottom: 1px solid rgba(175,174,162,0.28);
+      margin-bottom: 1.5rem;
+    }
+    .sidebar-close {
+      background: transparent; border: 1px solid var(--dot);
+      width: 2rem; height: 2rem; cursor: pointer; font-size: 1.2rem; line-height: 1;
+      color: var(--cream);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sidebar nav a {
+      display: block; padding: 1rem 0;
+      border-bottom: 1px solid rgba(175,174,162,0.2);
+      font-family: 'DM Mono', monospace; font-size: 0.9rem;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--cream); text-decoration: none; font-weight: 500;
+    }
+    .sidebar nav a:hover { color: var(--red); padding-left: 0.5rem; transition: all 0.2s; }
+
+    /* ---------- SELECT YOUR INDUSTRY ---------- */
+    .ind-section {
+      padding: 5rem 1.5rem 4.5rem;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .ind-heading {
+      font-family: 'Inter', sans-serif; font-weight: 500;
+      font-size: clamp(2.5rem, 9vw, 8rem); line-height: 0.95;
+      letter-spacing: -0.05em; margin: 0 0 4.5rem; color: var(--cream);
+    }
+    .ind-heading span { color: var(--red); }
+    .ind-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 4rem 2rem;
+    }
+    .ind-item {
+      display: flex; flex-direction: column; align-items: center;
+      text-decoration: none; color: var(--cream); padding: 0.5rem 1rem;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .ind-num {
+      font-family: 'Gochi Hand', cursive; font-size: clamp(3rem, 8vw, 5rem); line-height: 1;
+      margin-bottom: 1.25rem; display: inline-block;
+      transition: transform 0.25s ease, color 0.2s ease;
+    }
+    .ind-item:hover .ind-num { color: var(--red); transform: rotate(-5deg) scale(1.1); }
+    .ind-name {
+      font-family: 'Inter', sans-serif; font-weight: 500;
+      font-size: clamp(1.25rem, 3.5vw, 1.75rem); line-height: 1.1; letter-spacing: -0.03em;
+      margin: 0 0 0.8rem; max-width: 280px; text-wrap: balance;
+    }
+    .ind-desc { font-size: 0.9rem; line-height: 1.5; color: var(--dot); max-width: 300px; margin: 0; }
+    .ind-item:hover .ind-name { color: var(--red); }
+
+    /* ---------- PACKAGES: CARD CAROUSEL ---------- */
+    .pack-section {
+      margin: 0; padding: 4rem 1.5rem;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .pack-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: center;
+    }
+    .pack-eyebrow {
+      font-family: 'DM Mono', monospace; font-size: 0.75rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--dot); margin-bottom: 1rem;
+    }
+    .pack-title {
+      font-family: 'Inter', sans-serif; font-weight: 500;
+      font-size: clamp(1.75rem, 3.4vw, 2.8rem); line-height: 1.1;
+      letter-spacing: -0.03em; margin: 0 0 1.25rem; color: var(--cream);
+    }
+    .pack-title span { color: var(--red); }
+    .pack-desc { font-size: 0.95rem; line-height: 1.55; color: var(--dot); max-width: 380px; }
+    .pack-controls { display: flex; align-items: center; gap: 0.6rem; margin-top: 1.75rem; }
+    .pack-controls button {
+      width: 2.6rem; height: 2.6rem; border: 1px solid var(--cream);
+      background: transparent; color: var(--cream); cursor: pointer; font-size: 1.1rem;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .pack-controls button:hover { background: var(--cream); color: var(--navy); }
+    .pack-count { font-family: 'DM Mono', monospace; font-size: 0.75rem; margin-left: 0.75rem; color: var(--dot); }
+
+    .pack-stage { position: relative; height: 580px; }
+    .pack-card {
+      position: absolute; top: 10px; left: 50%;
+      width: 310px; height: 545px; margin-left: -155px;
+      background: #eeeeec; color: #111; border: 1px solid rgba(0,0,0,0.08);
+      padding: 1.1rem 1.35rem; display: flex; flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.55s cubic-bezier(.22,.7,.25,1), opacity 0.45s ease, filter 0.45s ease;
+      will-change: transform;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      box-sizing: border-box;
+    }
+    .pack-card.is-active { cursor: default; box-shadow: 0 18px 50px rgba(0,0,0,0.45); }
+    .pack-card-top {
+      display: flex; justify-content: space-between; color: #111;
+      font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .pack-visual {
+      height: 96px; margin: 0.8rem 0 0.9rem; border-radius: 14px;
+      display: flex; align-items: flex-end; justify-content: space-between; padding: 0.7rem 0.9rem;
+      color: rgba(255,255,255,0.95);
+      font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+      box-sizing: border-box;
+    }
+    .pack-visual b { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 2rem; letter-spacing: -0.04em; line-height: 1; }
+    .pack-name { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.45rem; letter-spacing: -0.03em; margin: 0 0 0.55rem; line-height: 1.1; color: #111; }
+    .pack-text { font-size: 0.72rem; line-height: 1.4; margin: 0 0 0.5rem; color: #111; }
+    .pack-text .lbl { font-family: 'DM Mono', monospace; font-size: 9px; text-transform: uppercase; font-weight: 600; }
+    .pack-list { margin: 0.2rem 0 0; padding: 0; list-style: none; font-size: 0.72rem; line-height: 1.35; color: #555; flex: 1; }
+    .pack-list li { border-left: 1px solid #111; padding-left: 0.55rem; margin-bottom: 0.3rem; }
+    .pack-actions { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+    .pack-actions button {
+      flex: 1; font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 0.6rem 0.75rem; border: none; border-radius: 0; cursor: pointer;
+      background: var(--red); color: #fff;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .pack-actions button:hover { opacity: 0.8; }
+
+    /* ---------- ALLIANCE MARQUEE ---------- */
+    .alliance-wrap {
+      padding: 3rem 1rem;
+      overflow: hidden;
+      margin: 2rem 0;
+      box-sizing: border-box;
+    }
+    .alliance-head {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .alliance-head h2 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: clamp(1.25rem, 3vw, 1.5rem);
+      margin: 0;
+      white-space: nowrap;
+      text-align: center;
+    }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .animate-marquee { animation: marquee 30s linear infinite; }
+    .animate-marquee:hover { animation-play-state: paused; }
+    .alliance-logo-img {
+      max-height: 56px; width: auto; margin: 0 0.75rem;
+      background: transparent; padding: 8px 14px; border-radius: 8px;
+      filter: grayscale(20%); opacity: 0.95; transition: all 0.2s ease;
+    }
+    .alliance-logo-img:hover { filter: grayscale(0%); opacity: 1; }
+
+    /* ---------- Classifieds / Inquiry ---------- */
+    .split {
+      max-width: 1280px; margin: 3rem auto; padding: 0 1rem;
+      display: grid; grid-template-columns: 1fr 1fr;
+      box-sizing: border-box;
+    }
+    .split > div { padding: 2.5rem; box-sizing: border-box; }
+    .split > div:first-child { border-right: 1px solid rgba(175,174,162,0.28); }
+    .field {
+      width: 100%; box-sizing: border-box; background: transparent; color: var(--cream);
+      border: 1px solid rgba(175,174,162,0.5); padding: 0.55rem 0.6rem; font-size: 0.75rem;
+      font-family: 'Inter', sans-serif; margin-bottom: 0.75rem; outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 0;
+    }
+    .field::placeholder { color: var(--dot); }
+    .field:focus { border-color: var(--red); }
+
+    /* ---------- Footer ---------- */
+    .foot-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+    .foot-grid ul { list-style: none; padding: 0; margin: 0.5rem 0 0; }
+    .foot-grid li { margin-bottom: 0.35rem; }
+    .foot-grid a { text-decoration: none; }
+
+    /* =========================================================
+       RESPONSIVE — TABLET & MOBILE
+       ========================================================= */
+
+    /* --- Large tablets / small laptops (≤1024px) --- */
+    @media (max-width: 1024px) {
+      .hero { padding: 56px clamp(14px, 3vw, 32px) 32px; gap: 20px; }
+      .hero-logo { flex: 0 0 clamp(110px, 16vw, 180px); width: clamp(110px, 16vw, 180px); }
+      .pack-inner { gap: 1.5rem; }
+      .pack-stage { height: 540px; }
+      .pack-card { width: 290px; height: 510px; margin-left: -145px; }
+    }
+
+    /* --- Tablets (≤900px) --- */
+    @media (max-width: 900px) {
+      .ind-grid { grid-template-columns: repeat(2, 1fr); gap: 3rem 1.5rem; }
+      .foot-grid { grid-template-columns: repeat(2, 1fr); gap: 1.75rem; }
+      .ind-heading { margin-bottom: 3.5rem; }
+      .pack-inner { grid-template-columns: 1fr 1.6fr; }
+      .pack-stage { height: 500px; }
+      .pack-card { width: 270px; height: 480px; margin-left: -135px; }
+      .split > div { padding: 2rem; }
+    }
+
+    /* --- Small tablets / large phones (≤768px) --- */
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 56px 16px 28px;
+        gap: 20px;
+      }
+      .hero-logo {
+        flex: 0 0 auto;
+        width: 140px;
+        align-self: flex-start;
+        margin-top: 0;
+        padding: 8px;
+      }
+      .mac-window { height: 420px; border-radius: 22px; }
+      .mac-sidebar { display: none; }
+      .page-main { width: 52%; height: 60%; border-radius: 32px; }
+      .sheet-a { right: 14%; top: 10%; }
+      .sheet-b { left: 12%; top: 26%; }
+      .sheet-c { right: 10%; bottom: 16%; }
+      .mac-input { width: 62%; height: 42px; font-size: 10.5px; padding: 0 6px 0 14px; }
+      .mac-input .btns span { width: 26px; height: 26px; }
+      .slide-dots { bottom: 62px; }
+
+      .pack-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .pack-section { padding: 3rem 1rem; }
+      .pack-stage { height: 520px; }
+      .pack-card { width: 280px; height: 500px; margin-left: -140px; }
+      .pack-controls { margin-top: 1.25rem; }
+
+      .ind-section { padding: 3.5rem 1rem 3rem; }
+      .ind-heading { margin-bottom: 3rem; }
+
+      .split { grid-template-columns: 1fr; margin: 2rem auto; }
+      .split > div { padding: 1.75rem 1.25rem; }
+      .split > div:first-child {
+        border-right: none;
+        border-bottom: 1px solid rgba(175,174,162,0.28);
+      }
+
+      .alliance-wrap { padding: 2.25rem 0.75rem; margin: 1.5rem 0; }
+      .alliance-logo-img { max-height: 46px; padding: 6px 10px; margin: 0 0.5rem; }
+
+      footer { padding: 2rem 1rem 1.5rem !important; }
+      .foot-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    }
+
+    /* --- Phones (≤640px) --- */
+    @media (max-width: 640px) {
+      .menu-toggle {
+        top: 12px; right: 12px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.7rem;
+        gap: 0.4rem;
+      }
+      .menu-toggle .bars i { width: 12px; }
+
+      .hero { padding: 52px 12px 24px; gap: 16px; }
+      .hero-logo { width: 120px; }
+
+      .mac-window { height: 380px; border-radius: 18px; }
+      .mac-titlebar { height: 42px; flex: 0 0 42px; padding: 0 14px; }
+      .mac-dots i { width: 10px; height: 10px; }
+      .mac-left svg, .mac-right svg { width: 14px; height: 14px; }
+      .page-main { width: 62%; height: 55%; border-radius: 26px; font-size: 10px; padding: 16px; }
+      .mac-input { width: 74%; height: 38px; font-size: 10px; padding: 0 5px 0 12px; bottom: 12px; right: 12px; }
+      .mac-input .btns span { width: 24px; height: 24px; }
+      .mac-input .btns svg { width: 11px; height: 11px; }
+      .slide-dots { bottom: 56px; }
+
+      .ind-section { padding: 3rem 1rem 2.5rem; }
+      .ind-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .ind-heading { margin-bottom: 2.5rem; }
+      .ind-num { margin-bottom: 0.75rem; }
+
+      .pack-section { padding: 2.5rem 0.75rem; }
+      .pack-stage { height: 490px; }
+      .pack-card { width: 260px; height: 470px; margin-left: -130px; padding: 1rem 1.1rem; }
+      .pack-visual { height: 82px; }
+      .pack-visual b { font-size: 1.6rem; }
+      .pack-name { font-size: 1.25rem; }
+      .pack-controls button { width: 2.3rem; height: 2.3rem; }
+
+      .split > div { padding: 1.5rem 1rem; }
+      .field { padding: 0.7rem 0.6rem; font-size: 0.8rem; }
+
+      .alliance-logo-img { max-height: 40px; padding: 5px 8px; margin: 0 0.4rem; }
+
+      footer { padding: 1.75rem 1rem 1.25rem !important; }
+      .foot-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+
+    /* --- Small phones (≤400px) --- */
+    @media (max-width: 400px) {
+      .hero { padding: 48px 10px 20px; }
+      .hero-logo { width: 100px; }
+
+      .mac-window { height: 340px; }
+      .page-main { width: 68%; height: 52%; font-size: 9px; padding: 14px; border-radius: 22px; }
+      .mac-input { width: 80%; height: 34px; font-size: 9px; }
+      .mac-input .btns span { width: 22px; height: 22px; }
+
+      .ind-section { padding: 2.5rem 0.75rem 2rem; }
+      .ind-heading { margin-bottom: 2rem; }
+
+      .pack-stage { height: 460px; }
+      .pack-card { width: 240px; height: 440px; margin-left: -120px; }
+      .pack-visual { height: 76px; }
+
+      .btn-editorial { padding: 0.65rem 1.1rem; font-size: 0.7rem; }
+    }
+
+    /* --- Ensure tap targets remain comfortable on touch --- */
+    @media (hover: none) and (pointer: coarse) {
+      .ind-item:hover .ind-num,
+      .ind-item:hover .ind-name { color: inherit; transform: none; }
+      .pack-controls button:hover { background: transparent; color: var(--cream); }
+      .btn-editorial:hover { opacity: 1; }
+      .animate-marquee:hover { animation-play-state: running; }
+    }
+
+    /* --- Landscape phones: prevent the mac window being too tall --- */
+    @media (max-height: 520px) and (orientation: landscape) {
+      .mac-window { height: 320px; }
+      .pack-stage { height: 420px; }
+      .pack-card { height: 400px; }
     }
   </style>
 </head>
-<body class="min-h-screen">
-  <!-- Main Container -->
-  <div class="min-h-screen bg-[hsl(43,33%,93%)] text-[hsl(0,0%,8%)]">
+<body class="bg-background text-foreground">
 
-    <!-- ============================================ -->
-    <!-- HEADER COMPONENT (from Header.tsx)          -->
-    <!-- ============================================ -->
-    
-    <!-- TopBar with REAL-TIME CLOCK -->
-    <div class="border-b border-[hsl(0,0%,8%)]">
-      <div class="flex items-center justify-between px-4 md:px-8 py-2 text-xs font-mono tracking-widest uppercase">
-        <span id="live-clock">LOADING...</span>
-        <span>ISSUE 01</span>
-      </div>
-      <div class="text-center py-2 border-t border-[hsl(0,0%,8%)]">
-        <p class="text-xs font-mono tracking-[0.3em] uppercase">
-          Strategic Systems & Operational Intelligence
-        </p>
+  <!-- Interactive dot background -->
+  <canvas id="dot-canvas"></canvas>
+
+  <div class="page">
+
+    <!-- Modal -->
+    <div id="modal-overlay" class="modal-overlay">
+      <div class="modal-content">
+        <button class="modal-close" id="modal-close">×</button>
+        <div id="modal-body"></div>
       </div>
     </div>
 
-    <!-- Masthead -->
-    <div class="text-center py-8 md:py-12 border-b border-[hsl(0,0%,8%)]">
-      <h1 class="font-['Playfair_Display'] text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
-        THE CONTROL<br />ROOM
+    <!-- Right Sidebar (toggle) -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+    <aside class="sidebar" id="sidebar" aria-hidden="true">
+      <div class="sidebar-head">
+        <span class="font-mono-custom text-[10px] tracking-widest uppercase text-muted-foreground">Index</span>
+        <button class="sidebar-close" id="sidebar-close" aria-label="Close menu">×</button>
+      </div>
+      <nav>
+        <a href="#our-work-section">Packages</a>
+        <a href="archives.html">Our Work</a>
+        <a href="how-we-work.html">How We Work</a>
+      </nav>
+    </aside>
+
+    <!-- Header -->
+    <div class="w-full">
+      <div class="py-2 px-4 md:px-8">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+
+          <!-- Left -->
+          <div class="w-1/3 text-left flex items-center gap-2">
+            <span class="font-mono-custom text-[10px] tracking-widest uppercase text-muted-foreground">
+              EST. 2024
+            </span>
+            <a href="https://thecontrolroom.solutions/" target="_blank" class="text-[9px] py-1 px-2 font-medium uppercase tracking-wide transition-opacity hover:opacity-80 whitespace-nowrap" style="background-color: #d21316; color: white; text-decoration:none;">Tech Side</a>
+          </div>
+
+          <!-- Center -->
+          <div class="w-1/3 text-center">
+            <span class="font-display-sans text-sm md:text-base tracking-wide uppercase text-foreground">
+              Media Intelligence
+            </span>
+          </div>
+
+          <!-- Right -->
+          <div class="w-1/3 text-right">
+            <span id="live-clock" class="font-mono-custom text-[10px] tracking-widest uppercase text-foreground whitespace-nowrap">
+              TODAY: THURSDAY, OCTOBER 8, 2026 AT 04:57:01 PM GMT+5:30
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
+        <span class="bars"><i></i><i></i><i></i></span> Menu
+      </button>
+
+      <div class="hero-logo">
+        <img src="assets/tcr-logo.png" alt="The Control Room logo"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="hero-logo-fallback">TCR</div>
+      </div>
+
+      <div class="mac-window">
+        <div class="mac-titlebar">
+          <div class="mac-left">
+            <div class="mac-dots"><i></i><i></i><i></i></div>
+            <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><line x1="10" y1="5" x2="10" y2="19"/></svg>
+            <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+          <div class="mac-right">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg>
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></svg>
+          </div>
+        </div>
+
+        <div class="mac-body">
+          <div class="slides">
+            <div class="track" id="slide-track">
+              <div class="slide s1"><div class="sheet sheet-a"></div><div class="sheet sheet-b"></div><div class="sheet sheet-c"></div><div class="page-main">Page 01</div></div>
+              <div class="slide s2"><div class="sheet sheet-a"></div><div class="sheet sheet-b"></div><div class="sheet sheet-c"></div><div class="page-main">Page 02</div></div>
+              <div class="slide s3"><div class="sheet sheet-a"></div><div class="sheet sheet-b"></div><div class="sheet sheet-c"></div><div class="page-main">Page 03</div></div>
+            </div>
+          </div>
+          <div class="slide-dots" id="slide-dots"><button class="on"></button><button></button><button></button></div>
+
+          <div class="mac-sidebar">
+            <div class="mac-search"><svg viewBox="0 0 24 24" style="width:12px;height:12px"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></div>
+            <a href="#" class="active"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H3z"/></svg>Home</a>
+            <a href="#our-work-section"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="4" y1="10" x2="20" y2="10"/></svg>Packages</a>
+            <a href="archives.html"><svg viewBox="0 0 24 24"><path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4z"/><path d="M20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6z"/></svg>Our Work</a>
+            <a href="how-we-work.html"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>How We Work</a>
+            <div class="group">Projects</div>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdyLGomKaYpmfrt3pY4Cb0TrYrc80M3BqVGPmBfI1Qh-VkifA/viewform?usp=dialog" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>Start a project</a>
+            <div class="group">Chats</div>
+            <a href="mailto:connect@thecontrolroom.solutions"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4z"/></svg>Start a chat</a>
+            <div class="divider"></div>
+            <a href="#submit-inquiry"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/></svg>Inquiry</a>
+          </div>
+
+          <a class="mac-input" href="https://docs.google.com/forms/d/e/1FAIpQLSdyLGomKaYpmfrt3pY4Cb0TrYrc80M3BqVGPmBfI1Qh-VkifA/viewform?usp=dialog" target="_blank">
+            <span>Start a conversation</span>
+            <span class="btns">
+              <span><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="22"/></svg></span>
+              <span><svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Title under the hero -->
+    <div class="text-center py-8 md:py-12">
+      <h1 class="font-display-sans text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+        TCR<span style="color: #d21316;">Tech</span>.Solutions
       </h1>
     </div>
 
-    <!-- NavBar -->
-    <div class="border-b border-[hsl(0,0%,8%)]">
-      <div class="flex flex-col md:flex-row items-center justify-between px-4 md:px-8 py-3 gap-2 text-xs font-mono tracking-wider uppercase">
-        <div class="flex items-center gap-2">
-          <span>📍</span> <span>TACTICAL ANALYSIS</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span>📞</span> <span>CALCULATED ACTION PLAN</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span>✉️</span> <span>OPTIMISED RESULTS</span>
-        </div>
+    <!-- Contact strip -->
+    <div class="py-3 px-4 md:px-8">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-xs font-mono-custom tracking-wide">
+        <span>connect@thecontrolroom.solutions</span>
+        <span>+91 9082638041</span>
       </div>
     </div>
 
-    <!-- IndexSection -->
-    <div class="border-b border-[hsl(0,0%,8%)]">
-      <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[hsl(0,0%,8%)]">
-
-        <!-- Column 1 -->
-        <div class="px-4 md:px-8 py-4">
-          <h3 class="font-['Playfair_Display'] text-lg font-bold mb-2">INDEX</h3>
-          <div class="flex flex-col gap-2">
-            <a href="how-we-work.html" class="text-xs font-mono uppercase tracking-wider text-left py-1 hover:opacity-60 transition-opacity focus:outline-none">
-              HOW WE WORK
-            </a>
-            <a href="how-we-work.html#problem" class="text-xs font-mono uppercase tracking-wider text-left py-1 hover:opacity-60 transition-opacity focus:outline-none">
-              PROBLEM
-            </a>
-            <a href="how-we-work.html#solution" class="text-xs font-mono uppercase tracking-wider text-left py-1 hover:opacity-60 transition-opacity focus:outline-none">
-              SOLUTION
-            </a>
-            <a href="how-we-work.html#outcome" class="text-xs font-mono uppercase tracking-wider text-left py-1 hover:opacity-60 transition-opacity focus:outline-none">
-              OUTCOME
-            </a>
-          </div>
-        </div>
-
-        <!-- Column 2 -->
-        <div class="px-4 md:px-8 py-4">
-          <h3 class="font-['Playfair_Display'] text-sm font-bold mb-2 uppercase">
-            Book an Appointment
-          </h3>
-          <div class="flex flex-col gap-2">
-            <a href="#book-appointment" class="text-xs font-mono uppercase tracking-wider text-left py-1 hover:opacity-60 transition-opacity">
-              SCHEDULE CONSULTATION
-            </a>
-            <a href="#request-a-call" class="text-xs font-mono uppercase tracking-wider text-left py-1 hover:opacity-60 transition-opacity">
-              REQUEST STRATEGY CALL
-            </a>
-          </div>
-        </div>
-
-        <!-- Column 3 -->
-        <div class="px-4 md:px-8 py-4">
-          <h3 class="font-['Playfair_Display'] text-sm font-bold mb-2 uppercase">
-            Our Work
-          </h3>
-          <div class="flex flex-col gap-2">
-            <a href="archives.html" class="text-xs font-mono uppercase tracking-wider text-left py-1 hover:opacity-60 transition-opacity focus:outline-none">
-              ARCHIVES
-            </a>
-          </div>
-        </div>
-
+    <!-- Book Appointment -->
+    <div class="py-6 px-4 md:px-8">
+      <div class="max-w-7xl mx-auto flex flex-col items-center justify-center text-center">
+        <h3 class="font-display-sans text-lg font-bold mb-2">Book Your Appointment</h3>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdyLGomKaYpmfrt3pY4Cb0TrYrc80M3BqVGPmBfI1Qh-VkifA/viewform?usp=dialog" target="_blank" class="inline-block text-xs py-2 px-6 font-medium uppercase tracking-wide transition-opacity hover:opacity-80" style="background-color: #d21316; color: white; text-decoration:none;">
+          Schedule Appointment
+        </a>
       </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- HERO SECTION (from HeroSection.tsx)         -->
-    <!-- ============================================ -->
+    <!-- SELECT YOUR INDUSTRY -->
+    <section class="ind-section" id="industries">
+      <h2 class="ind-heading">Select your<br>industry<span>.</span></h2>
+      <div class="ind-grid">
 
-    <section class="border-b border-[hsl(0,0%,8%)]">
-      <div class="grid grid-cols-1 lg:grid-cols-2">
-        
-        <!-- Left Column -->
-        <div class="p-6 md:p-10 lg:p-12 border-b lg:border-b-0 lg:border-r border-[hsl(0,0%,8%)]">
-          <p class="text-xs font-mono tracking-widest uppercase mb-4">
-            BRIEFING NOTES
-          </p>
+        <a class="ind-item" href="Multi-Business-Owners.html">
+          <span class="ind-num">01</span>
+          <h3 class="ind-name">Multi Business Owners</h3>
+          <p class="ind-desc">One view across every venture. Unified systems, reporting and communication for owners running more than one business.</p>
+        </a>
 
-          <h2 class="font-['Playfair_Display'] text-6xl md:text-6xl lg:text-8xl font-black leading-[0.9] mb-8">
-            ONE<br />STORY.<br />ONE<br />SYSTEM.
-          </h2>
+        <a class="ind-item" href="realestate.html">
+          <span class="ind-num">02</span>
+          <h3 class="ind-name">Real Estate</h3>
+          <p class="ind-desc">Capture, qualify and follow up every enquiry automatically, so your sales team only speaks to serious buyers.</p>
+        </a>
 
-          <blockquote class="font-['Playfair_Display'] italic text-lg md:text-xl mb-8 border-l-2 border-[hsl(0,0%,8%)] pl-4">
-            "Visibility without structure collapses.<br />We build both."
-          </blockquote>
+        <a class="ind-item" href="eventsclubs.html">
+          <span class="ind-num">03</span>
+          <h3 class="ind-name">Clubs &amp; Events</h3>
+          <p class="ind-desc">Bookings, guest lists, promotions and reminders on autopilot, from the first enquiry to the night itself.</p>
+        </a>
 
-          <!-- HERO IMAGE - with tactical styling -->
-          <div class="w-full aspect-video tactical-image overflow-hidden" id="book-appointment">
-            <img 
-              src="assets/images/hero-image.jpg" 
-              alt="Strategic documents on control room desk"
-              class="w-full h-full object-cover"
-              onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full bg-[hsl(0,0%,15%)] flex items-center justify-center\'><span class=\'text-[hsl(43,33%,93%)] text-xs font-mono\'>[HERO IMAGE PENDING]</span></div>'"
-            >
-          </div>
+        <a class="ind-item" href="hospitality.html">
+          <span class="ind-num">04</span>
+          <h3 class="ind-name">Hospitality</h3>
+          <p class="ind-desc">Reservations, guest communication and reviews handled smoothly, so your team can focus on the experience.</p>
+        </a>
 
-          <div class="flex justify-between mt-4 text-[10px] font-mono tracking-widest uppercase">
-            <span>FIG 1.1: SYSTEM ARCHITECTURE</span>
-            <span>PHOTO: ARCHIVE</span>
-          </div>
-        </div>
+        <a class="ind-item" href="clinics.html">
+          <span class="ind-num">05</span>
+          <h3 class="ind-name">Clinics</h3>
+          <p class="ind-desc">Appointments, reminders and patient follow-ups automated, with fewer no-shows and less front-desk load.</p>
+        </a>
 
-        <!-- Right Column -->
-        <div class="p-6 md:p-10 lg:p-12">
-          <p class="text-xs font-mono tracking-widest uppercase mb-6">
-            BRIEFING NOTES
-          </p>
-
-          <div class="mb-10 space-y-6">
-            <p class="font-['DM_Sans'] text-sm leading-relaxed first-letter:text-5xl first-letter:font-['Playfair_Display'] first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:leading-none">
-              Here at The Control Room, we combine the force of visual media and
-              technology to shape, sharpen, and elevate your story. We operate as
-              two parallel units working in complete alignment.
-            </p>
-
-            <p class="font-['DM_Sans'] text-sm leading-relaxed">
-              Communication and Infrastructure. Creative and system. Not separate
-              services. One unified alliance built around your objective.
-            </p>
-
-            <p class="font-['DM_Sans'] text-sm leading-relaxed">
-              We do not believe in generic marketing aimed at "everyone". We
-              identify the exact audience that matters to you. We study them. We
-              understand where they exist, how they think, and what moves them.
-              Then we build communication that speaks directly to them.
-            </p>
-
-            <p class="font-['DM_Sans'] text-sm leading-relaxed">
-              Beyond visibility, we build the systems that welcome your people in.
-              Websites. Platforms. Funnels. Backend structures. Operational flows.
-            </p>
-
-            <p class="font-['DM_Sans'] text-sm leading-relaxed">
-              If there are technical gaps, inefficiencies, or revenue leaks in
-              your ecosystem, we identify them and fix them.
-            </p>
-
-            <p class="font-['DM_Sans'] text-sm leading-relaxed font-semibold">
-              In short, <br />
-              We build both <br />
-              A clear narrative and a working system.<br />
-            </p>
-          </div>
-
-          <!-- Appointment Card -->
-          <div class="w-full aspect-video">
-            <div class="bg-[hsl(0,0%,8%)] text-[hsl(43,33%,93%)] p-6 h-full flex flex-col justify-between">
-              
-              <div>
-                <h3 class="font-['Playfair_Display'] text-xl font-bold mb-3">
-                  BOOK AN APPOINTMENT
-                </h3>
-
-                <p class="text-xs font-['DM_Sans'] mb-6 leading-relaxed opacity-80">
-                  Reactive strategies are no longer sufficient. The modern
-                  landscape demands predictive capability. Schedule a consultation
-                  to discuss your strategic needs.
-                </p>
-
-                <div class="space-y-3">
-                  <input type="text" placeholder="Your Name" class="w-full bg-transparent border border-[hsl(43,33%,93%)/30] px-3 py-2 text-xs font-mono placeholder:text-[hsl(43,33%,93%)/50] focus:outline-none focus:border-[hsl(43,33%,93%)]" value="John Doe" />
-                  <input type="email" placeholder="Email Address" class="w-full bg-transparent border border-[hsl(43,33%,93%)/30] px-3 py-2 text-xs font-mono placeholder:text-[hsl(43,33%,93%)/50] focus:outline-none focus:border-[hsl(43,33%,93%)]" value="john@example.com" />
-                  <input type="tel" placeholder="Phone Number" class="w-full bg-transparent border border-[hsl(43,33%,93%)/30] px-3 py-2 text-xs font-mono placeholder:text-[hsl(43,33%,93%)/50] focus:outline-none focus:border-[hsl(43,33%,93%)]" value="+91 98765 43210" />
-                  <input type="text" placeholder="dd-mm-yyyy" class="w-full bg-transparent border border-[hsl(43,33%,93%)/30] px-3 py-2 text-xs font-mono placeholder:text-[hsl(43,33%,93%)/50] focus:outline-none focus:border-[hsl(43,33%,93%)]" value="19-02-2026" />
-                </div>
-              </div>
-
-              <button class="mt-4 w-full bg-[hsl(43,33%,93%)] text-[hsl(0,0%,8%)] py-2 text-xs font-mono tracking-widest uppercase hover:opacity-90 transition-opacity">
-                BOOK APPOINTMENT
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- PROBLEM/SOLUTION SECTION (from ProblemSolutionSection.tsx) -->
-    <!-- ============================================ -->
-    
-    <section class="border-b border-[hsl(0,0%,8%)]">
-      
-      <!-- Two Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[hsl(0,0%,8%)] border-t border-[hsl(0,0%,8%)]">
-        <div class="p-6 md:p-8">
-          <h3 class="font-['Playfair_Display'] text-sm font-bold uppercase mb-3">How We Work</h3>
-          <p class="text-xs font-['DM_Sans'] leading-relaxed mb-4">
-            We diagnose. We define the objective. We build the structure. We execute with precision. 
-            We refine based on results. Strategy and systems move together. Always.
-          </p>
-          <a href="how-we-work.html" class="text-xs font-mono tracking-widest uppercase flex items-center gap-1 hover:opacity-70 transition-opacity">
-            UNDERSTAND THE FRAMEWORK <span class="text-xs">→</span>
-          </a>
-        </div>
-
-        <div class="p-6 md:p-8">
-          <h3 class="font-['Playfair_Display'] text-sm font-bold uppercase mb-3">Our Work</h3>
-          <p class="text-xs font-['DM_Sans'] leading-relaxed mb-4">
-            Our work spans political positioning, real estate launches, product rollouts, and system 
-            restructuring. Every engagement is built around one objective: measurable influence supported 
-            by reliable systems.
-          </p>
-          <a href="archives.html" class="text-xs font-mono tracking-widest uppercase flex items-center gap-1 hover:opacity-70 transition-opacity">
-            VIEW SELECTED ENGAGEMENTS <span class="text-xs">→</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- ALLIANCES SECTION (from AlliancesSection.tsx) -->
-    <!-- ============================================ -->
-    
-    <section class="py-12 border-b border-[hsl(0,0%,8%)]">
-      <div class="flex items-center gap-4 px-8 mb-8">
-        <div class="h-px flex-1 bg-[hsl(0,0%,8%)]"></div>
-        <h2 class="font-['Playfair_Display'] text-2xl md:text-3xl font-bold tracking-wider uppercase whitespace-nowrap">
-          OUR ALLIANCES
-        </h2>
-        <div class="h-px flex-1 bg-[hsl(0,0%,8%)]"></div>
-      </div>
-
-      <div class="overflow-hidden py-6">
-        <div class="flex w-max animate-marquee">
-          <!-- Alliance Logos - 14 logos as per your structure -->
-          <img src="assets/logos/1.png" alt="Alliance Partner 1" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gMTwvdGV4dD48L3N2Zz4='; this.classList.add('placeholder-logo');">
-          <img src="assets/logos/2.png" alt="Alliance Partner 2" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gMjwvdGV4dD48L3N2Zz4=';">
-          <img src="assets/logos/3.png" alt="Alliance Partner 3" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gMzwvdGV4dD48L3N2Zz4=';">
-          <img src="assets/logos/4.png" alt="Alliance Partner 4" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gNDwvdGV4dD48L3N2Zz4=';">
-          <img src="assets/logos/5.png" alt="Alliance Partner 5" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gNTwvdGV4dD48L3N2Zz4=';">
-          <img src="assets/logos/6.png" alt="Alliance Partner 6" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gNjwvdGV4dD48L3N2Zz4=';">
-          <img src="assets/logos/7.png" alt="Alliance Partner 7" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gNzwvdGV4dD48L3N2Zz4=';">
-          <img src="assets/logos/8.png" alt="Alliance Partner 8" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gODwvdGV4dD48L3N2Zz4=';">
-          <img src="assets/logos/9.png" alt="Alliance Partner 9" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gOTwvdGV4dD48L3N2Zz4=';">
-          <img src="assets/logos/10.png" alt="Alliance Partner 10" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gMTA8L3RleHQ+PC9zdmc+';">
-          <img src="assets/logos/11.png" alt="Alliance Partner 11" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gMTE8L3RleHQ+PC9zdmc+';">
-          <img src="assets/logos/12.png" alt="Alliance Partner 12" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gMTI8L3RleHQ+PC9zdmc+';">
-          <img src="assets/logos/13.png" alt="Alliance Partner 13" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gMTM8L3RleHQ+PC9zdmc+';">
-          <img src="assets/logos/14.png" alt="Alliance Partner 14" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMyMjIyMjIiLz48dGV4dCB4PSI0MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJNb25vLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmNWYwZTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPkxPR08gMTQ8L3RleHQ+PC9zdmc+';">
-          
-          <!-- Duplicate set for seamless marquee loop -->
-          <img src="assets/logos/1.png" alt="Alliance Partner 1" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/2.png" alt="Alliance Partner 2" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/3.png" alt="Alliance Partner 3" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/4.png" alt="Alliance Partner 4" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/5.png" alt="Alliance Partner 5" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/6.png" alt="Alliance Partner 6" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/7.png" alt="Alliance Partner 7" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/8.png" alt="Alliance Partner 8" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/9.png" alt="Alliance Partner 9" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/10.png" alt="Alliance Partner 10" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/11.png" alt="Alliance Partner 11" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/12.png" alt="Alliance Partner 12" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/13.png" alt="Alliance Partner 13" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-          <img src="assets/logos/14.png" alt="Alliance Partner 14" class="mx-8 h-12 md:h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" onerror="this.onerror=null; this.style.display='none';">
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- STRATEGIC INTELLIGENCE (from StrategicIntelligence.tsx) -->
-    <!-- ============================================ -->
-    
-    <section class="bg-[hsl(0,0%,8%)] text-[hsl(43,33%,93%)] border-b border-[hsl(0,0%,8%)]">
-      <div class="grid grid-cols-1 lg:grid-cols-3">
-        <div class="lg:col-span-2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
-          <h2 class="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-tight mb-6 tracking-tight text-center lg:text-left">
-            STRATEGIC<br />INTELLIGENCE
-          </h2>
-          <p class="text-sm font-['DM_Sans'] leading-relaxed opacity-80 max-w-xl mb-8 text-center lg:text-left mx-auto lg:mx-0">
-            In-depth analysis of systemic challenges facing modern organizations. Our strategic articles 
-            examine the intersection of structure, visibility, and control in complex operational environments.
-          </p>
-          <div class="text-center lg:text-left">
-            <a href="archives.html" class="border border-[hsl(43,33%,93%)] px-8 py-3 text-xs font-mono tracking-widest uppercase hover:bg-[hsl(43,33%,93%)] hover:text-[hsl(0,0%,8%)] transition-colors">
-              ACCESS ARCHIVES
-            </a>
-          </div>
-        </div>
-        
-        <!-- STRATEGIC ICON -->
-        <div class="flex items-center justify-center p-8 lg:p-12">
-          <div class="w-48 h-48 md:w-56 md:h-56 tactical-image overflow-hidden rounded-none">
-            <img 
-              src="assets/strategic-icon.jpg" 
-              alt="Strategic Intelligence Icon"
-              class="w-full h-full object-cover"
-              onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full bg-[hsl(43,33%,93%)/10] flex items-center justify-center text-[hsl(43,33%,93%)/50] text-xs font-mono\'>[INTEL ICON]</div>'"
-            >
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================ -->
-    <!-- CLASSIFIEDS SECTION (from ClassifiedsSection.tsx) -->
-    <!-- ============================================ -->
-    
-    <section class="border-b border-[hsl(0,0%,8%)]">
-      <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-[hsl(0,0%,8%)]">
-
-        <!-- Left - Classifieds -->
-        <div class="p-6 md:p-10">
-          <h2 class="font-['Playfair_Display'] text-3xl md:text-4xl font-black uppercase mb-2">CLASSIFIEDS</h2>
-          <p class="text-xs font-mono tracking-widest uppercase mb-6">FORM ID: CR-992-X</p>
-          
-          <div class="mb-6">
-            <h4 class="font-['Playfair_Display'] text-sm font-bold uppercase mb-2">SUBMISSION GUIDELINES</h4>
-            <p class="text-xs font-['DM_Sans'] leading-relaxed mb-4">
-              All inquiries are treated with strict confidentiality. Ensure all fields are completed 
-              accurately for processing. Response time: 24-48 hours.
-            </p>
-            <p class="text-xs font-mono uppercase tracking-wider mb-1">DIRECT LINE:</p>
-            <p class="text-xs font-mono mb-4">+91 7879 186506</p>
-            <p class="text-xs font-mono mb-4">thecontrolroom.agency@gmail.com</p>
-          </div>
-
-          <a href="hiring.html" class="border-2 border-[hsl(0,0%,8%)] px-8 py-3 text-xs font-mono tracking-widest uppercase hover:bg-[hsl(0,0%,8%)] hover:text-[hsl(43,33%,93%)] transition-colors inline-block">
-            WE ARE HIRING
-          </a>
-        </div>
-
-        <!-- Right - Submit Inquiry -->
-        <div class="p-6 md:p-10" id="request-a-call">
-          <h2 class="font-['Playfair_Display'] text-3xl md:text-4xl font-black uppercase mb-2">REQUEST A CALL</h2>
-          <p class="text-xs font-mono tracking-widest uppercase mb-6">FORM ID: CR-992-X</p>
-          
-          <p class="text-[10px] font-mono tracking-widest uppercase mb-4">
-            CLASSIFIED SUBMISSION FORM — CONFIDENTIAL
-          </p>
-
-          <div class="space-y-4">
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="text-[10px] font-mono uppercase tracking-wider">FULL NAME *</label>
-                <input type="text" value="Jane Smith" class="w-full border border-[hsl(0,0%,8%)] bg-transparent px-3 py-2 text-xs font-mono mt-1 focus:outline-none" />
-              </div>
-              <div>
-                <label class="text-[10px] font-mono uppercase tracking-wider">EMAIL ADDRESS *</label>
-                <input type="email" value="jane.smith@example.com" class="w-full border border-[hsl(0,0%,8%)] bg-transparent px-3 py-2 text-xs font-mono mt-1 focus:outline-none" />
-              </div>
-            </div>
-            <div>
-              <label class="text-[10px] font-mono uppercase tracking-wider">CONTACT NUMBER *</label>
-              <input type="tel" value="+91 98765 12345" class="w-full border border-[hsl(0,0%,8%)] bg-transparent px-3 py-2 text-xs font-mono mt-1 focus:outline-none" />
-            </div>
-            <div>
-              <label class="text-[10px] font-mono uppercase tracking-wider">INQUIRY DETAILS *</label>
-              <textarea rows="4" class="w-full border border-[hsl(0,0%,8%)] bg-transparent px-3 py-2 text-xs font-mono mt-1 focus:outline-none resize-none">Interested in strategic consultation for our organization.</textarea>
-            </div>
-            <button class="bg-[hsl(0,0%,8%)] text-[hsl(43,33%,93%)] px-8 py-3 text-xs font-mono tracking-widest uppercase hover:opacity-90 transition-opacity">
-              REQUEST A CALL
-            </button>
-          </div>
-        </div>
+        <a class="ind-item" href="#" data-industry="logistics">
+          <span class="ind-num">06</span>
+          <h3 class="ind-name">Logistics &amp; Transport</h3>
+          <p class="ind-desc">Dispatch updates, customer communication and operational tracking connected into one system.</p>
+        </a>
 
       </div>
     </section>
 
-    <!-- ============================================ -->
-    <!-- FOOTER (from Footer.tsx)                     -->
-    <!-- ============================================ -->
-    
-    <footer class="border-t border-[hsl(0,0%,8%)]">
-      <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[hsl(0,0%,8%)]">
-        <div class="p-6 md:p-8">
-          <h3 class="font-['Playfair_Display'] text-xl font-bold uppercase mb-2">THE CONTROL ROOM</h3>
-          <p class="text-xs font-['DM_Sans'] leading-relaxed opacity-70">
-            Strategic systems for organizations that demand clarity, structure, and operational control.
-          </p>
+    <!-- PACKAGES: card carousel -->
+    <section class="pack-section" id="our-work-section">
+      <div class="pack-inner">
+        <div>
+          <div class="pack-eyebrow">Introducing our packages</div>
+          <h2 class="pack-title">Pick a system<br>and <span>watch it work</span></h2>
+          <p class="pack-desc">Eleven ready-to-deploy packages across automation, advertising, visibility, development, content and growth. Click a card or use the arrows to explore.</p>
+          <div class="pack-controls">
+            <button id="pack-prev" aria-label="Previous">←</button>
+            <button id="pack-next" aria-label="Next">→</button>
+            <span class="pack-count" id="pack-count">01 / 11</span>
+          </div>
         </div>
-        <div class="p-6 md:p-8">
-          <h4 class="text-[10px] font-mono tracking-widest uppercase mb-3">Navigation</h4>
-          <ul class="text-xs font-mono space-y-2 uppercase tracking-wider">
-            <li>
-              <a href="archives.html" class="hover:opacity-70 transition-opacity">
-                Archives
-              </a>
-            </li>
-            <li>
-              <a href="how-we-work.html" class="hover:opacity-70 transition-opacity">
-                How We Work
-              </a>
-            </li>
-            <li>
-              <a href="#book-appointment" class="hover:opacity-70 transition-opacity uppercase tracking-wider">
-                Book an Appointment
-              </a>
-            </li>
+        <div class="pack-stage" id="pack-stage"></div>
+      </div>
+    </section>
+
+    <!-- Alliance Marquee -->
+    <section class="alliance-wrap">
+      <div style="max-width:80rem;margin:0 auto;">
+        <div class="alliance-head">
+          <h2>Our Alliance's</h2>
+        </div>
+        <div style="overflow:hidden;">
+          <div class="flex w-max animate-marquee items-center" id="alliance-logo-container"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Classifieds + Submit Inquiry -->
+    <div class="split" id="submit-inquiry">
+      <div>
+        <h2 class="font-display-sans text-3xl font-bold mb-4">Classifieds</h2>
+        <p class="text-sm font-semibold">Authorized Guidelines</p>
+        <p class="text-xs text-muted-foreground mt-2">All pieces are vetted for structural detail to our E-Table, our publication for the industry. Enquire on a brief of Alliance.</p>
+        <a href="hiring.html" id="hiringLink"><button class="btn-editorial mt-6 text-sm">We Are Hiring</button></a>
+      </div>
+      <div>
+        <h2 class="font-display-sans text-3xl font-bold">Submit Inquiry</h2>
+        <p class="font-mono-custom text-[10px] uppercase mt-1">Private &amp; Confidential</p>
+        <p class="font-mono-custom text-[9px] mt-2" style="margin-bottom:1rem;">Classified Submission Panel — Confidential</p>
+        <input type="text" id="inquiryName" placeholder="NAME *" class="field">
+        <input type="email" id="inquiryEmail" placeholder="EMAIL *" class="field">
+        <input type="text" id="inquiryContact" placeholder="CONTACT NUMBER" class="field">
+        <input type="tel" id="inquiryPhone" placeholder="PHONE NUMBER *" class="field">
+        <button id="submitInquiryBtn" class="btn-editorial" style="width:100%;">Submit Inquiry</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-foreground/20 py-8 px-4 mt-12">
+      <div class="foot-grid">
+        <div>
+          <h3 class="font-display-sans font-bold">The Control Room</h3>
+          <p class="text-xs text-muted-foreground mt-2">Strategic systems for organizations that demand clarity, structure, and operational control. Building systems that matter.</p>
+        </div>
+        <div>
+          <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Navigation</h4>
+          <ul class="text-xs">
+            <li><a href="#our-work-section" class="hover:underline">Our Work</a></li>
+            <li><a href="hiring.html" class="hover:underline">Hiring</a></li>
+            <li><a href="archives.html" class="hover:underline">Archives</a></li>
+            <li><a href="how-we-work.html" class="hover:underline">How We Work</a></li>
           </ul>
         </div>
-        <div class="p-6 md:p-8">
-          <h4 class="text-[10px] font-mono tracking-widest uppercase mb-3">Contact</h4>
-          <ul class="text-xs font-mono space-y-1 tracking-wider">
-            <li>+91 7879 186506</li>
-            <li>thecontrolroom.agency@gmail.com</li>
+        <div>
+          <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Industries</h4>
+          <ul class="text-xs">
+            <li><a href="multi-business-owners.html" class="hover:underline">Multi Business Owners</a></li>
+            <li><a href="realestate.html" class="hover:underline">Real Estate</a></li>
+            <li><a href="eventsclubs.html" class="hover:underline">Clubs &amp; Events</a></li>
+            <li><a href="hospitality.html" class="hover:underline">Hospitality</a></li>
+            <li><a href="clinics.html" class="hover:underline">Clinics</a></li>
+            <li><a href="#" class="hover:underline">Logistics &amp; Transport</a></li>
           </ul>
         </div>
+        <div>
+          <h4 class="font-mono-custom text-[10px] uppercase font-semibold">Contact</h4>
+          <div class="text-xs mt-2">
+            <a href="mailto:connect@thecontrolroom.solutions" class="clickable-contact font-mono-custom block hover:opacity-70">connect@thecontrolroom.solutions</a>
+            <a href="tel:+919082638041" class="clickable-contact font-mono-custom block hover:opacity-70">+91 9082638041</a>
+          </div>
+        </div>
       </div>
-      <div class="border-t border-[hsl(0,0%,8%)] px-6 md:px-8 py-4">
-        <p class="text-[10px] font-mono tracking-widest uppercase text-center opacity-60">
-          © 2026 THE CONTROL ROOM. ALL RIGHTS RESERVED.
-        </p>
-      </div>
+      <div class="text-center text-[10px] font-mono-custom mt-8">© 2027 THE CONTROL ROOM. ALL RIGHTS RESERVED.</div>
     </footer>
 
   </div>
 
   <script>
-    // ============================================
-    // REAL-TIME CLOCK
-    // ============================================
+    const PROPOSAL_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdyLGomKaYpmfrt3pY4Cb0TrYrc80M3BqVGPmBfI1Qh-VkifA/viewform?usp=dialog';
+
+    // ---------- INTERACTIVE DOT BACKGROUND ----------
+    (function () {
+      const canvas = document.getElementById('dot-canvas');
+      const ctx = canvas.getContext('2d');
+      const GAP = 28, BASE_R = 1.3, INFLUENCE = 150;
+      const GRAY = [175, 174, 162], RED = [210, 19, 22];
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let dots = [], w = 0, h = 0;
+      const mouse = { x: -9999, y: -9999 };
+      const ripples = [];
+
+      function build() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = window.innerWidth; h = window.innerHeight;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        dots = [];
+        for (let y = GAP / 2; y < h + GAP; y += GAP) {
+          for (let x = GAP / 2; x < w + GAP; x += GAP) {
+            dots.push({ ox: x, oy: y, x: x, y: y, vx: 0, vy: 0 });
+          }
+        }
+        if (reduced) drawStatic();
+      }
+
+      function drawStatic() {
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = 'rgba(175,174,162,0.5)';
+        dots.forEach(d => { ctx.beginPath(); ctx.arc(d.ox, d.oy, BASE_R, 0, Math.PI * 2); ctx.fill(); });
+      }
+
+      function frame() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = ripples.length - 1; i >= 0; i--) {
+          ripples[i].r += 9;
+          ripples[i].life = 1 - ripples[i].r / 650;
+          if (ripples[i].life <= 0) ripples.splice(i, 1);
+        }
+        for (let i = 0; i < dots.length; i++) {
+          const d = dots[i];
+          let tx = d.ox, ty = d.oy, heat = 0;
+
+          const dx = d.ox - mouse.x, dy = d.oy - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < INFLUENCE && dist > 0.01) {
+            const t = 1 - dist / INFLUENCE;
+            const push = t * t * 38;
+            tx += (dx / dist) * push; ty += (dy / dist) * push;
+            heat = Math.max(heat, t);
+          }
+          for (let r = 0; r < ripples.length; r++) {
+            const rp = ripples[r];
+            const rx = d.ox - rp.x, ry = d.oy - rp.y;
+            const rd = Math.sqrt(rx * rx + ry * ry);
+            const diff = Math.abs(rd - rp.r);
+            if (diff < 50 && rd > 0.01) {
+              const k = (1 - diff / 50) * rp.life;
+              tx += (rx / rd) * k * 16; ty += (ry / rd) * k * 16;
+              heat = Math.max(heat, k);
+            }
+          }
+
+          d.vx += (tx - d.x) * 0.12; d.vy += (ty - d.y) * 0.12;
+          d.vx *= 0.78; d.vy *= 0.78;
+          d.x += d.vx; d.y += d.vy;
+
+          const cr = Math.round(GRAY[0] + (RED[0] - GRAY[0]) * heat);
+          const cg = Math.round(GRAY[1] + (RED[1] - GRAY[1]) * heat);
+          const cb = Math.round(GRAY[2] + (RED[2] - GRAY[2]) * heat);
+          ctx.fillStyle = `rgba(${cr},${cg},${cb},${0.5 + 0.5 * heat})`;
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, BASE_R + heat * 2.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        requestAnimationFrame(frame);
+      }
+
+      build();
+      window.addEventListener('resize', build);
+      if (!reduced) {
+        window.addEventListener('pointermove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+        window.addEventListener('pointerdown', e => { mouse.x = e.clientX; mouse.y = e.clientY; ripples.push({ x: e.clientX, y: e.clientY, r: 0, life: 1 }); }, { passive: true });
+        window.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') { mouse.x = -9999; mouse.y = -9999; } });
+        document.documentElement.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+        requestAnimationFrame(frame);
+      }
+    })();
+
+    // ---------- Live clock ----------
     function updateClock() {
       const now = new Date();
-      const formatted = now.toLocaleString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true
-      }).toUpperCase();
-      
-      document.getElementById('live-clock').textContent = formatted;
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true, timeZoneName: 'short' };
+      document.getElementById('live-clock').innerHTML = `TODAY: ${now.toLocaleString('en-US', options).toUpperCase()}`;
     }
-    
-    // Update immediately
-    updateClock();
-    
-    // Update every second
-    setInterval(updateClock, 1000);
+    updateClock(); setInterval(updateClock, 1000);
+
+    // ---------- Right sidebar ----------
+    const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+    function openSidebar() { sidebar.classList.add('active'); sidebarBackdrop.classList.add('active'); sidebar.setAttribute('aria-hidden', 'false'); }
+    function closeSidebar() { sidebar.classList.remove('active'); sidebarBackdrop.classList.remove('active'); sidebar.setAttribute('aria-hidden', 'true'); }
+    document.getElementById('menu-toggle').addEventListener('click', openSidebar);
+    document.getElementById('sidebar-close').addEventListener('click', closeSidebar);
+    sidebarBackdrop.addEventListener('click', closeSidebar);
+    sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSidebar));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeSidebar(); closeModal(); } });
+
+    // ---------- Hero: sliding colourful pages ----------
+    (function () {
+      const track = document.getElementById('slide-track');
+      const dots = Array.from(document.querySelectorAll('#slide-dots button'));
+      const total = dots.length;
+      let idx = 0, timer;
+      function go(i) {
+        idx = (i + total) % total;
+        track.style.transform = `translateX(-${idx * 100}%)`;
+        dots.forEach((d, n) => d.classList.toggle('on', n === idx));
+      }
+      function start() { clearInterval(timer); timer = setInterval(() => go(idx + 1), 3500); }
+      dots.forEach((d, n) => d.addEventListener('click', () => { go(n); start(); }));
+      start();
+    })();
+
+    // ---------- Package data ----------
+    const packages = [
+      {
+        id: 'whatsapp-automation', name: 'WhatsApp Automation', tag: 'Automation',
+        grad: 'linear-gradient(135deg,#34d399,#0f766e)',
+        problem: 'Missed inquiries, delayed replies, manual follow-ups.',
+        system: 'Automated WhatsApp workflows for inquiries, reminders, follow-ups, confirmations, and customer communication.',
+        bullets: ['Instant auto replies', 'Reduced response time', 'Centralized communication']
+      },
+      {
+        id: 'meta-ads-automation', name: 'Meta Ads Automation', tag: 'Advertising',
+        grad: 'linear-gradient(135deg,#60a5fa,#1d4ed8)',
+        problem: 'Inconsistent posting, weak ad performance, manual campaign handling.',
+        system: 'Automated ad deployment, scheduled posting, creative rollout, and campaign management across Meta platforms.',
+        bullets: ['Scheduled content rollout', 'Automated campaign flow', 'Consistent brand visibility']
+      },
+      {
+        id: 'lead-management', name: 'Lead Management', tag: 'Sales',
+        grad: 'linear-gradient(135deg,#fbbf24,#ea580c)',
+        problem: 'Unqualified leads wasting sales time and marketing budget.',
+        system: 'Automated lead capture, qualification, filtering, routing, and sales workflow management using smart scoring systems.',
+        bullets: ['Hot lead prioritization', 'Reduced junk inquiries', 'Faster conversion tracking']
+      },
+      {
+        id: 'ai-visibility', name: 'AI Visibility', tag: 'Visibility',
+        grad: 'linear-gradient(135deg,#c084fc,#6d28d9)',
+        problem: 'Business not discoverable through AI platforms and modern search behavior.',
+        system: 'AI visibility optimization designed to improve recommendation probability across ChatGPT, Gemini, Claude, and AI-driven discovery systems.',
+        bullets: ['Increased AI discoverability', 'Higher inbound visibility', 'Reduced dependency on ads']
+      },
+      {
+        id: 'development', name: 'Website & App Development', tag: 'Development',
+        grad: 'linear-gradient(135deg,#38bdf8,#0e7490)',
+        problem: 'Outdated or missing website, manual processes, no direct customer access.',
+        system: 'High-performance websites, web applications, and mobile apps built for conversion and operational control.',
+        bullets: ['More leads, fast loading', 'Mobile-first design', 'Scalable systems'],
+        intro: 'An outdated website costs you trust, and manual processes cost you time. We build modern, high-performance websites, custom web applications and mobile apps around how your business actually runs.',
+        benefits: ['Conversion-focused websites with lead capture', 'Custom web apps that replace spreadsheets and manual work', 'Android and iOS apps for direct customer engagement', 'Mobile-first, fast-loading and built to scale'],
+        perfect: 'Businesses that need a stronger online presence, internal tools, or a customer-facing app.'
+      },
+      {
+        id: 'social-media', name: 'Social Media Management', tag: 'Social',
+        grad: 'linear-gradient(135deg,#f472b6,#be185d)',
+        problem: 'Irregular posting, no content direction, low engagement.',
+        system: 'End-to-end handling of content calendars, posting, community replies, and monthly performance reporting.',
+        bullets: ['Consistent presence', 'Higher engagement', 'Monthly reporting'],
+        intro: 'Social media works when it is consistent and intentional. We plan, publish and manage your channels so your brand stays visible and active without pulling your team away from the business.',
+        benefits: ['Planned monthly content calendars', 'Scheduled posting across platforms', 'Community management and replies', 'Regular performance reporting'],
+        perfect: 'Brands that want a steady, professional social presence without handling it in-house.'
+      },
+      {
+        id: 'press-release', name: 'Press Release', tag: 'PR',
+        grad: 'linear-gradient(135deg,#94a3b8,#334155)',
+        problem: 'Important news that never reaches the right audience or the media.',
+        system: 'Professionally written press releases distributed to relevant journalists, publications, and media outlets.',
+        bullets: ['Credible media coverage', 'Wider reach', 'Stronger brand authority'],
+        intro: 'A launch, a milestone or an event deserves proper coverage. We write and distribute press releases that reach the right publications and strengthen your credibility.',
+        benefits: ['Professionally written, newsroom-ready copy', 'Distribution to relevant media and publications', 'Stronger brand authority and trust', 'Coverage that supports search and AI visibility'],
+        perfect: 'Launches, funding or partnership news, events, awards and brand milestones.'
+      },
+      {
+        id: 'content-creation', name: 'Content Creation', tag: 'Content',
+        grad: 'linear-gradient(135deg,#fb7185,#e11d48)',
+        problem: 'Weak, inconsistent content that fails to hold attention.',
+        system: 'Scripts, reels, photography, graphics, and copy created to match your brand voice.',
+        bullets: ['Scroll-stopping creatives', 'On-brand storytelling', 'Ready-to-publish assets'],
+        intro: 'Content is what people actually see of your brand. We create reels, photography, graphics and copy that look consistent, sound like you and are ready to publish.',
+        benefits: ['Short-form video and reels', 'Photography and graphic design', 'Captions, scripts and brand copy', 'A consistent visual and verbal identity'],
+        perfect: 'Brands that need a steady supply of quality creative across platforms.'
+      },
+      {
+        id: 'pre-production', name: 'Pre-Production', tag: 'Production',
+        grad: 'linear-gradient(135deg,#fcd34d,#b45309)',
+        problem: 'Shoots that overrun time and budget because nothing was planned.',
+        system: 'Concepts, scripts, storyboards, casting, locations, schedules, and shot lists planned before cameras roll.',
+        bullets: ['Clear creative direction', 'Controlled budgets', 'Smooth shoot days'],
+        intro: 'Most production problems start before the shoot. Our pre-production planning gives every project a clear idea, a clear schedule and a clear budget before anyone picks up a camera.',
+        benefits: ['Concept development and scripting', 'Storyboards and shot lists', 'Casting, locations and scheduling', 'Budget planning and logistics'],
+        perfect: 'Ad films, brand videos, event coverage, product shoots and campaign content.'
+      },
+      {
+        id: 'post-production', name: 'Post-Production', tag: 'Production',
+        grad: 'linear-gradient(135deg,#a78bfa,#4c1d95)',
+        problem: 'Good footage let down by slow, inconsistent editing.',
+        system: 'Editing, colour grading, sound design, motion graphics, and platform-specific exports.',
+        bullets: ['Polished final output', 'Faster turnaround', 'Platform-ready formats'],
+        intro: 'Great footage needs a great finish. Our post-production team edits, grades and sound-designs your content into a polished final cut, exported for every platform you publish on.',
+        benefits: ['Editing and storytelling cuts', 'Colour grading and sound design', 'Motion graphics and titles', 'Exports for each platform and format'],
+        perfect: 'Brands, agencies and creators with raw footage that needs a professional finish.'
+      },
+      {
+        id: 'growth-strategy', name: 'Growth Strategy', tag: 'Strategy',
+        grad: 'linear-gradient(135deg,#4ade80,#15803d)',
+        problem: 'Marketing spend without a clear plan or measurable direction.',
+        system: 'A data-led roadmap covering positioning, channels, funnels, budgets, and KPIs.',
+        bullets: ['Clear roadmap', 'Measurable KPIs', 'Sustainable growth'],
+        intro: 'Growth needs direction. We map out your positioning, channels, funnel and budget into a practical roadmap with targets you can actually measure.',
+        benefits: ['Market and competitor review', 'Channel and funnel planning', 'Budget allocation and KPI setting', 'A step-by-step roadmap for execution'],
+        perfect: 'Businesses ready to scale, enter a new market, or fix marketing that is not delivering.'
+      }
+    ];
+
+    // Detailed modal content for the original four packages
+    const caseStudies = {
+      'whatsapp-automation': {
+        title: 'WhatsApp Automation',
+        image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=600&auto=format',
+        content: '<p class="text-sm mb-3">Missed inquiries cost you customers. Manual replies waste your team\'s time. Our WhatsApp Automation ensures every message gets an instant, intelligent response — 24/7.</p><p class="text-sm mb-3">Automated workflows handle inquiries, reminders, follow-ups, confirmations, and customer communication without human intervention.</p><p class="text-sm mb-2 font-semibold">Key Benefits:</p><ul class="list-disc pl-5 text-sm mb-3"><li>Instant auto-replies to every inquiry</li><li>70% reduction in response time</li><li>Centralized communication across all channels</li><li>Automated follow-ups nurture leads while you sleep</li><li>No missed opportunities, no delayed responses</li></ul><p class="text-sm">Perfect for: Service businesses, real estate agents, clinics, hospitality, and any business that receives high volume of customer inquiries.</p>'
+      },
+      'meta-ads-automation': {
+        title: 'Meta Ads Automation',
+        image: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=600&auto=format',
+        content: '<p class="text-sm mb-3">Inconsistent posting and manual campaign handling lead to wasted ad spend and poor ROI. Our Meta Ads Automation ensures your campaigns run like clockwork.</p><p class="text-sm mb-3">Automated ad deployment, scheduled posting, creative rollout, and campaign management across Facebook and Instagram platforms.</p><p class="text-sm mb-2 font-semibold">Key Benefits:</p><ul class="list-disc pl-5 text-sm mb-3"><li>Scheduled content rollout across all Meta platforms</li><li>Automated campaign flow from creation to reporting</li><li>Consistent brand visibility without manual effort</li><li>Optimized ad spend with performance-based adjustments</li><li>40% reduction in campaign management time</li></ul><p class="text-sm">Perfect for: E-commerce brands, real estate developers, event organizers, hospitality businesses, and agencies managing multiple client accounts.</p>'
+      },
+      'lead-management': {
+        title: 'Lead Management & Sales Automation',
+        image: 'https://images.unsplash.com/photo-1552581234-26160f608093?w=600&auto=format',
+        content: '<p class="text-sm mb-3">80% of leads never convert because they\'re unqualified. Your sales team wastes hours chasing dead ends. Our Lead Management System changes that.</p><p class="text-sm mb-3">Automated lead capture, qualification, filtering, routing, and sales workflow management using smart scoring systems that prioritize hot leads.</p><p class="text-sm mb-2 font-semibold">Key Benefits:</p><ul class="list-disc pl-5 text-sm mb-3"><li>Hot lead prioritization ensures your best prospects get called first</li><li>70% reduction in junk inquiries reaching your sales team</li><li>Faster conversion tracking from first touch to close</li><li>Sales team focuses only on qualified, high-intent buyers</li><li>Up to 40% increase in conversion rates</li></ul><p class="text-sm">Perfect for: Real estate, automotive, education, B2B services, and any business with a sales team handling high-volume inquiries.</p>'
+      },
+      'ai-visibility': {
+        title: 'Marketing & AI Visibility',
+        image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&auto=format',
+        content: '<p class="text-sm mb-3">Your customers are asking ChatGPT, Gemini, and Claude for recommendations. If your business isn\'t appearing, you\'re losing to competitors who are.</p><p class="text-sm mb-3">AI visibility optimization designed to improve recommendation probability across all major AI platforms and AI-driven discovery systems.</p><p class="text-sm mb-2 font-semibold">Key Benefits:</p><ul class="list-disc pl-5 text-sm mb-3"><li>Increased AI discoverability across ChatGPT, Gemini, and Claude</li><li>Higher inbound visibility without paid ads</li><li>Reduced dependency on expensive advertising channels</li><li>Future-proof your business for AI-first search behavior</li><li>Appear when customers ask "who offers [your service] near me"</li></ul><p class="text-sm">Perfect for: Local businesses, service providers, hospitality, real estate, clinics, and any business that relies on local customer discovery.</p>'
+      }
+    };
+
+    // ---------- Modal ----------
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalBody = document.getElementById('modal-body');
+    const modalClose = document.getElementById('modal-close');
+
+    function openModal(pkgId) {
+      const p = packages.find(x => x.id === pkgId);
+      if (!p) return;
+      const cs = caseStudies[pkgId];
+      let title, media, content;
+      if (cs) {
+        title = cs.title;
+        media = `<img src="${cs.image}" alt="${cs.title}" class="case-study-img" onerror="this.outerHTML='<div class=&quot;modal-banner&quot; style=&quot;background:${p.grad}&quot;>${p.tag}</div>'">`;
+        content = cs.content;
+      } else {
+        title = p.name;
+        media = `<div class="modal-banner" style="background:${p.grad}">${p.tag}</div>`;
+        content = `<p class="text-sm mb-3">${p.intro}</p>
+          <p class="text-sm mb-2 font-semibold">Key Benefits:</p>
+          <ul class="list-disc pl-5 text-sm mb-3">${p.benefits.map(b => `<li>${b}</li>`).join('')}</ul>
+          <p class="text-sm">Perfect for: ${p.perfect}</p>`;
+      }
+      modalBody.innerHTML = `${media}<h2 class="font-display-sans text-2xl mb-4">${title}</h2>${content}
+        <button class="btn-editorial mt-6" style="background:#d21316;color:#fff" onclick="window.open(PROPOSAL_URL,'_blank')">Request Proposal</button>`;
+      modalOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      modalOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    modalClose.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+
+    // ---------- Smooth scroll ----------
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') { e.preventDefault(); return; }
+        const target = document.querySelector(targetId);
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+
+    // ---------- Submit Inquiry ----------
+    document.getElementById('submitInquiryBtn')?.addEventListener('click', () => {
+      const name = document.getElementById('inquiryName')?.value;
+      const email = document.getElementById('inquiryEmail')?.value;
+      if (!name || !email) alert('Please fill in Name and Email.');
+      else alert(`Inquiry received from ${name}. We will contact you shortly. (Demo)`);
+    });
+
+    // ---------- PACKAGES CARD CAROUSEL ----------
+    (function () {
+      const stage = document.getElementById('pack-stage');
+      const counter = document.getElementById('pack-count');
+      const N = packages.length;
+      let active = 0, autoTimer = null;
+      const pad = (n, l) => String(n).padStart(l, '0');
+
+      packages.forEach((p, i) => {
+        const card = document.createElement('div');
+        card.className = 'pack-card';
+        card.innerHTML = `
+          <div class="pack-card-top"><span>Package</span><span>${pad(i + 1, 4)}</span></div>
+          <div class="pack-visual" style="background:${p.grad}"><span>${p.tag}</span><b>${pad(i + 1, 2)}</b></div>
+          <h3 class="pack-name">${p.name}</h3>
+          <p class="pack-text"><span class="lbl">Problem:</span> ${p.problem}</p>
+          <p class="pack-text"><span class="lbl">System:</span> ${p.system}</p>
+          <ul class="pack-list">${p.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+          <div class="pack-actions">
+            <button class="pack-view">View</button>
+            <button class="pack-proposal">Proposal</button>
+          </div>`;
+        card.addEventListener('click', () => { if (i !== active) { active = i; render(); restartAuto(); } });
+        card.querySelector('.pack-view').addEventListener('click', (e) => {
+          if (!card.classList.contains('is-active')) return;
+          e.stopPropagation(); openModal(p.id);
+        });
+        card.querySelector('.pack-proposal').addEventListener('click', (e) => {
+          if (!card.classList.contains('is-active')) return;
+          e.stopPropagation(); window.open(PROPOSAL_URL, '_blank');
+        });
+        stage.appendChild(card);
+      });
+
+      const cards = Array.from(stage.children);
+
+      function render() {
+        const isSmall = window.innerWidth < 860;
+        const isPhone = window.innerWidth < 640;
+        const spread = isPhone ? 110 : (isSmall ? 150 : 235);
+        cards.forEach((card, i) => {
+          let off = ((i - active) % N + N) % N;
+          if (off > N / 2) off -= N;
+          const abs = Math.abs(off);
+          card.classList.toggle('is-active', off === 0);
+          if (abs > 2) {
+            card.style.opacity = 0; card.style.pointerEvents = 'none'; card.style.filter = 'none';
+            card.style.transform = `translateX(${off * spread}px) scale(0.7)`; card.style.zIndex = 0;
+            return;
+          }
+          card.style.pointerEvents = 'auto';
+          card.style.opacity = abs === 0 ? 1 : abs === 1 ? 0.6 : 0.3;
+          card.style.filter = abs === 0 ? 'none' : `blur(${abs * 1.2}px)`;
+          card.style.transform = `translateX(${off * spread}px) scale(${abs === 0 ? 1 : abs === 1 ? 0.88 : 0.78})`;
+          card.style.zIndex = 10 - abs;
+        });
+        counter.textContent = `${pad(active + 1, 2)} / ${pad(N, 2)}`;
+      }
+      function next() { active = (active + 1) % N; render(); }
+      function prev() { active = (active - 1 + N) % N; render(); }
+      function restartAuto() { clearInterval(autoTimer); autoTimer = setInterval(next, 5000); }
+
+      document.getElementById('pack-next').addEventListener('click', () => { next(); restartAuto(); });
+      document.getElementById('pack-prev').addEventListener('click', () => { prev(); restartAuto(); });
+      stage.addEventListener('mouseenter', () => clearInterval(autoTimer));
+      stage.addEventListener('mouseleave', restartAuto);
+      window.addEventListener('resize', render);
+
+      let touchX = null;
+      stage.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+      stage.addEventListener('touchend', e => {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); restartAuto(); }
+        touchX = null;
+      });
+
+      render();
+      restartAuto();
+    })();
+
+    // ---------- ALLIANCE MARQUEE ----------
+    const allianceContainer = document.getElementById('alliance-logo-container');
+    if (allianceContainer) {
+      function makeLogo(i) {
+        const img = document.createElement('img');
+        img.src = `assets/logos/${i}.png`;
+        img.alt = `Alliance Partner ${i}`;
+        img.className = 'alliance-logo-img';
+        img.onerror = function() {
+          this.style.display = 'none';
+          const fallbackSpan = document.createElement('span');
+          fallbackSpan.className = 'mx-6 font-mono-custom text-sm';
+          fallbackSpan.innerText = `Alliance Partner ${i}`;
+          this.parentNode?.insertBefore(fallbackSpan, this);
+        };
+        return img;
+      }
+      for (let i = 1; i <= 14; i++) allianceContainer.appendChild(makeLogo(i));
+      const cloneContainer = document.createElement('div');
+      cloneContainer.className = 'flex items-center';
+      for (let i = 1; i <= 14; i++) cloneContainer.appendChild(makeLogo(i));
+      allianceContainer.appendChild(cloneContainer);
+    }
   </script>
 </body>
 </html>
